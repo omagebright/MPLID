@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+title: "MPLID: Membrane Protein-Lipid Interface Dataset"
+message: "If you use this dataset, please cite it using the metadata from this file."
+type: dataset
+authors:
+  - given-names: Folorunsho Bright
+    family-names: Omage
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+    affiliation: "Embrapa Agricultural Informatics"
+repository-code: "https://github.com/omageb/MPLID"
+url: "https://github.com/omageb/MPLID"
+abstract: >-
+  A large-scale, experimentally-validated dataset of membrane
+  protein-lipid contact residues derived from crystallographic
+  structures in the Protein Data Bank. Contains 4.7 million
+  residues from 2,792 membrane proteins with experimentally-
+  determined lipid contacts.
+keywords:
+  - membrane proteins
+  - lipid interactions
+  - protein structure
+  - machine learning
+  - benchmark dataset
+  - structural biology
+license: MIT
+version: "1.0.0"
+date-released: "2026-02-01"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.XXXXXXX"
+    description: "Zenodo archive of the dataset"
+preferred-citation:
+  type: article
+  authors:
+    - given-names: Folorunsho Bright
+      family-names: Omage
+  title: "MPLID: A Large-Scale Experimentally-Validated Dataset of Membrane Protein-Lipid Interface Residues"
+  journal: "GigaScience"
+  year: 2026

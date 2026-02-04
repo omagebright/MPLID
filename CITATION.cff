@@ -7,8 +7,8 @@ authors:
     family-names: Omage
     orcid: "https://orcid.org/0000-0000-0000-0000"
     affiliation: "Embrapa Agricultural Informatics"
-repository-code: "https://github.com/omageb/MPLID"
-url: "https://github.com/omageb/MPLID"
+repository-code: "https://github.com/omagebright/MPLID"
+url: "https://github.com/omagebright/MPLID"
 abstract: >-
   A large-scale, experimentally-validated dataset of membrane
   protein-lipid contact residues derived from crystallographic

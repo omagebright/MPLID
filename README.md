@@ -1,6 +1,6 @@
 # MPLID: Membrane Protein-Lipid Interface Dataset
 
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.XXXXXXX-blue)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18487585.svg)](https://doi.org/10.5281/zenodo.18487585)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Data: CC-BY 4.0](https://img.shields.io/badge/Data-CC--BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -188,7 +188,7 @@ If you use this dataset in your research, please cite:
   year = {2026},
   volume = {XX},
   pages = {XXX},
-  doi = {10.1093/gigascience/XXXX}
+  doi = {10.5281/zenodo.18487585}
 }
 ```
 

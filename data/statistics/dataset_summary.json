@@ -1,0 +1,21 @@
+{
+  "total_proteins": 3192,
+  "total_residues": 5134242,
+  "total_contacts": 38435,
+  "contact_rate": 0.007486012540896981,
+  "sequence_clusters": 594,
+  "splits": {
+    "train": {
+      "proteins": 1840,
+      "residues": 2634209
+    },
+    "val": {
+      "proteins": 811,
+      "residues": 1632603
+    },
+    "test": {
+      "proteins": 541,
+      "residues": 867430
+    }
+  }
+}

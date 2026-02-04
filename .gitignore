@@ -76,7 +76,6 @@ data/interim/*.log
 logs/
 *.log
 
-# Large data files (stored on Zenodo)
-data/processed/train_residues.csv
-data/processed/val_residues.csv
-data/processed/test_residues.csv
+# Large uncompressed data files (use .gz versions)
+data/processed/*.csv
+!data/processed/protein_metadata.csv

@@ -15,20 +15,20 @@ MPLID provides residue-level annotations of lipid contacts for 2,792 membrane pr
 
 | Metric | Value |
 |--------|-------|
-| Proteins | 2,792 |
-| Total residues | 4,717,703 |
-| Contact residues | 39,224 |
-| Contact rate | 0.83% |
-| Lipid types | 150+ |
+| Proteins | 3,192 |
+| Total residues | 5,134,242 |
+| Contact residues | 38,435 |
+| Contact rate | 0.75% |
+| Label source | Experimental (crystallized lipids) |
 | Sequence clusters (30% identity) | 594 |
 
 ### Dataset Splits
 
-| Split | Proteins | Residues | Contacts |
-|-------|----------|----------|----------|
-| Training | 1,840 | 2,634,209 | 25,891 |
-| Validation | 811 | 1,632,603 | 10,112 |
-| Test | 541 | 867,430 | 5,221 |
+| Split | Proteins | Residues |
+|-------|----------|----------|
+| Training | 1,840 | 2,634,209 |
+| Validation | 811 | 1,632,603 |
+| Test | 541 | 867,430 |
 
 Splits are performed at the protein level using sequence clustering to prevent data leakage.
 
@@ -57,22 +57,22 @@ pip install -r requirements.txt
 ```python
 import pandas as pd
 
-# Load training data
-train = pd.read_csv('data/processed/train_residues.csv')
+# Load training data (compressed format)
+train = pd.read_csv('data/processed/train_residues.csv.gz', compression='gzip')
 
 print(f"Training samples: {len(train):,}")
 print(f"Positive samples: {train['is_contact'].sum():,}")
 print(f"Positive rate: {train['is_contact'].mean():.2%}")
 
 # Filter for contact residues
-contacts = train[train['is_contact'] == 1]
-print(f"\nMost common lipid types:")
-print(contacts['lipid_type'].value_counts().head(10))
+contacts = train[train['is_contact'] == True]
+print(f"\nContact residues: {len(contacts):,}")
+print(f"Unique proteins with contacts: {contacts['pdb_id'].nunique():,}")
 ```
 
 ### Data Format
 
-Each CSV file contains the following columns:
+Each compressed CSV file (`.csv.gz`) contains the following columns:
 
 | Column | Type | Description |
 |--------|------|-------------|
@@ -80,8 +80,9 @@ Each CSV file contains the following columns:
 | `chain_id` | str | Chain identifier |
 | `residue_number` | int | Residue position in chain |
 | `residue_name` | str | Three-letter amino acid code |
-| `is_contact` | int | Binary label (1=contact, 0=non-contact) |
-| `lipid_type` | str | Lipid code if contact (e.g., CLR, CDL) |
+| `is_contact` | bool | Contact label (True/False) |
+| `label_source` | str | Label origin (EXPERIMENTAL) |
+| `confidence` | str | Label confidence level |
 | `min_distance` | float | Minimum distance to lipid (Angstroms) |
 | `cluster_id` | int | Sequence cluster assignment |
 | `split` | str | Dataset split (train/val/test) |

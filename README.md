@@ -199,15 +199,13 @@ If you use this dataset in your research, please cite:
 
 ## Acknowledgments
 
-This work was supported by:
-- CAPES (Coordenacao de Aperfeicoamento de Pessoal de Nivel Superior)
-- Embrapa Agricultural Informatics
+This research was funded by the São Paulo Research Foundation (FAPESP) (grant nos. 2023/02691-2, 2025/23708-6).
 
 ## Contact
 
 **Folorunsho Bright Omage**
-- Email: [email@example.com]
-- ORCID: [0000-0000-0000-0000]
+- Email: omagefolorunsho@gmail.com
+- ORCID: [0000-0002-9750-5034](https://orcid.org/0000-0002-9750-5034)
 
 ---
 

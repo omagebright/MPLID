@@ -35,7 +35,7 @@ Splits are performed at the protein level using sequence clustering to prevent d
 ## Installation
 
 ```bash
-git clone https://github.com/omageb/MPLID.git
+git clone https://github.com/omagebright/MPLID.git
 cd MPLID
 pip install -r requirements.txt
 ```

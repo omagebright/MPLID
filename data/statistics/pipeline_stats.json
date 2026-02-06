@@ -1,0 +1,48 @@
+{
+  "pipeline_version": "RCSB-only (no OPM dependency)",
+  "label_source": "CRYSTALLOGRAPHIC",
+  "distance_cutoff_angstrom": 4.0,
+  "residue_representation": "C-alpha atom",
+  "timestamp": "2026-02-06T02:00:59.394422",
+  "total_rcsb_lipid_structures": 8221,
+  "proteins_processed": 8221,
+  "proteins_with_contacts": 6270,
+  "proteins_failed": 675,
+  "total_residues": 10486965,
+  "positive_residues": 98101,
+  "positive_rate": 0.00935456540572034,
+  "n_clusters": 1848,
+  "sequence_identity_threshold": 0.3,
+  "train": {
+    "proteins": 4644,
+    "residues": 7521766,
+    "positives": 73432,
+    "positive_rate": 0.009762600963656673
+  },
+  "val": {
+    "proteins": 1436,
+    "residues": 1507429,
+    "positives": 10879,
+    "positive_rate": 0.007216923649472048
+  },
+  "test": {
+    "proteins": 1413,
+    "residues": 1391166,
+    "positives": 12980,
+    "positive_rate": 0.009330302781982883
+  },
+  "lipid_types_found": {
+    "UNKNOWN": 6270
+  },
+  "total_lipid_codes_queried": 121,
+  "comparison_to_dreamm": {
+    "dreamm_proteins": 54,
+    "dreamm_residues": 12805,
+    "dreamm_label_source": "Literature curation (EPR, fluorescence, mutagenesis)",
+    "mplid_proteins": 6270,
+    "mplid_residues": 10486965,
+    "mplid_label_source": "Crystallographic (4.0\u00c5 C\u03b1-to-lipid)",
+    "scale_increase_proteins": "116.1x",
+    "scale_increase_residues": "819.0x"
+  }
+}

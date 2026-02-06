@@ -2,35 +2,54 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18487585.svg)](https://doi.org/10.5281/zenodo.18487585)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Data: CC-BY 4.0](https://img.shields.io/badge/Data-CC--BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Data: CC0](https://img.shields.io/badge/Data-CC0%201.0-lightgrey.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
-A large-scale, experimentally-validated dataset of membrane protein-lipid contact residues derived from crystallographic structures in the Protein Data Bank.
+A large-scale dataset of experimentally validated lipid contact residues derived from crystallographic structures in the Protein Data Bank. **100% crystallographic labels with no computational database dependencies.**
 
 ## Overview
 
-MPLID provides residue-level annotations of lipid contacts for 2,792 membrane proteins, representing the largest experimentally-validated dataset of its kind. All labels are derived from crystallized lipids in PDB structures using a 4.0 Angstrom distance cutoff.
+MPLID provides residue-level annotations of lipid contacts for **7,541 proteins** with crystallized lipid molecules, representing the largest experimentally validated dataset of its kind. All labels are derived exclusively from crystallized lipids in PDB structures using a 4.0 Å Cα-to-lipid distance cutoff.
 
 ### Key Statistics
 
 | Metric | Value |
 |--------|-------|
-| Proteins | 3,192 |
-| Total residues | 5,134,242 |
-| Contact residues | 38,435 |
-| Contact rate | 0.75% |
+| Proteins | 7,541 |
+| Total residues | 10,486,965 |
+| Contact residues | 98,101 |
+| Contact rate | 0.94% |
 | Label source | Experimental (crystallized lipids) |
-| Sequence clusters (30% identity) | 594 |
+| Sequence clusters (30% identity) | 1,848 |
+| Lipid codes recognized | 121 |
 
 ### Dataset Splits
 
-| Split | Proteins | Residues |
-|-------|----------|----------|
-| Training | 1,840 | 2,634,209 |
-| Validation | 811 | 1,632,603 |
-| Test | 541 | 867,430 |
+| Split | Proteins | Residues | Contacts | Rate |
+|-------|----------|----------|----------|------|
+| Training | 4,644 | 7,521,766 | 73,432 | 0.98% |
+| Validation | 1,436 | 1,507,429 | 10,879 | 0.72% |
+| Test | 1,413 | 1,391,166 | 12,980 | 0.93% |
 
-Splits are performed at the protein level using sequence clustering to prevent data leakage.
+Splits are performed at the cluster level using 30% sequence identity to prevent data leakage.
+
+## What Makes MPLID Different
+
+### 100% Crystallographic Labels
+
+MPLID derives labels **directly from PDB crystallographic coordinates**. A residue is labeled positive if its Cα atom is within 4.0 Å of any heavy atom of a crystallized lipid molecule. No computational predictions, no membrane plane algorithms, no literature curation required.
+
+### Comparison with DREAMM
+
+| Aspect | DREAMM | MPLID |
+|--------|--------|-------|
+| Label source | Literature curation (EPR, fluorescence, mutagenesis) | PDB crystallography |
+| Biological question | Functional membrane contact | Structural lipid proximity |
+| Proteins | 54 | 7,541 (140× more) |
+| Residues | ~15,000 | 10,486,965 (699× more) |
+| Reproducibility | Requires literature access | Fully automated from PDB |
+
+Both datasets use experimental data but answer **different biological questions**. DREAMM identifies residues that functionally interact with membranes; MPLID identifies residues structurally proximate to crystallized lipids.
 
 ## Installation
 
@@ -47,8 +66,7 @@ pip install -r requirements.txt
 - numpy >= 1.20.0
 - biopython >= 1.79
 - scikit-learn >= 1.0.0
-- matplotlib >= 3.4.0
-- seaborn >= 0.11.0
+- requests >= 2.25.0
 
 ## Quick Start
 
@@ -72,7 +90,7 @@ print(f"Unique proteins with contacts: {contacts['pdb_id'].nunique():,}")
 
 ### Data Format
 
-Each compressed CSV file (`.csv.gz`) contains the following columns:
+Each CSV file contains the following columns:
 
 | Column | Type | Description |
 |--------|------|-------------|
@@ -80,10 +98,10 @@ Each compressed CSV file (`.csv.gz`) contains the following columns:
 | `chain_id` | str | Chain identifier |
 | `residue_number` | int | Residue position in chain |
 | `residue_name` | str | Three-letter amino acid code |
-| `is_contact` | bool | Contact label (True/False) |
-| `label_source` | str | Label origin (EXPERIMENTAL) |
+| `is_contact` | bool | Contact label (True if ≤4.0 Å from lipid) |
+| `label_source` | str | Always "EXPERIMENTAL" |
 | `confidence` | str | Label confidence level |
-| `min_distance` | float | Minimum distance to lipid (Angstroms) |
+| `min_distance` | float | Minimum Cα-to-lipid distance (Å) |
 | `cluster_id` | int | Sequence cluster assignment |
 | `split` | str | Dataset split (train/val/test) |
 
@@ -93,23 +111,16 @@ Each compressed CSV file (`.csv.gz`) contains the following columns:
 MPLID/
 ├── data/
 │   ├── processed/           # Ready-to-use dataset files
-│   │   ├── train_residues.csv
-│   │   ├── val_residues.csv
-│   │   ├── test_residues.csv
+│   │   ├── train_residues.csv.gz
+│   │   ├── val_residues.csv.gz
+│   │   ├── test_residues.csv.gz
 │   │   └── protein_metadata.csv
 │   └── statistics/          # Dataset statistics
-│       ├── lipid_distribution.csv
-│       └── dataset_summary.json
+│       └── pipeline_stats.json
 ├── scripts/                 # Data processing pipeline
-│   ├── 01_query_rcsb_lipids.py
-│   ├── 02_download_structures.py
-│   ├── 03_calculate_contacts.py
-│   ├── 04_cluster_sequences.py
-│   ├── 05_create_splits.py
-│   └── utils/
+│   └── run_rcsb_only_pipeline.py
 ├── notebooks/               # Analysis notebooks
-│   ├── 01_dataset_exploration.ipynb
-│   └── 02_statistical_analysis.ipynb
+│   └── dataset_exploration.ipynb
 └── docs/                    # Documentation
     ├── METHODOLOGY.md
     └── DATA_DICTIONARY.md
@@ -117,77 +128,66 @@ MPLID/
 
 ## Methodology
 
-### Data Sources
+### Data Source
 
-1. **OPM Database**: Membrane protein identification and positioning
-2. **RCSB PDB**: Structure coordinates and lipid ligand information
+MPLID uses a single data source: the **RCSB Protein Data Bank**. We query RCSB for all structures containing recognized lipid chemical components (121 codes), download the original PDB files preserving HETATM records, and compute contacts directly from atomic coordinates.
+
+**No OPM database, no membrane plane calculations, no external computational dependencies.**
 
 ### Contact Definition
 
-A residue is labeled as a lipid contact if any of its heavy atoms are within **4.0 Angstroms** of any heavy atom of a crystallized lipid molecule (HETATM records).
+A residue is labeled as a lipid contact if:
 
-### Supported Lipid Types
+```
+d_min(R, L) = min_{atom ∈ L} ||r_Cα - r_atom|| ≤ 4.0 Å
+```
 
-The dataset recognizes 150+ lipid codes including:
+Where `r_Cα` is the Cα atom coordinate and `r_atom` is any heavy atom of lipid molecule L.
 
-- **Phospholipids**: CDL, POV, PCW, PEE, PGV, PLM
+### Supported Lipid Types (121 codes)
+
+- **Phospholipids**: CDL, POV, PCW, PEE, PGV, PLM, etc.
 - **Sterols**: CLR, CHD, Y01, BCL
-- **Sphingolipids**: SPH, S1P
-- **Fatty acids**: MYR, OLA, STE, ARA
-- **Detergents**: LDA, LMT, BOG, OLC
+- **Sphingolipids**: SPH, S1P, HXJ
+- **Fatty acids**: MYR, OLA, STE, ARA, DHA
+- **Detergents**: LDA, LMT, BOG, OLC, DPC
 
 See `docs/DATA_DICTIONARY.md` for the complete list.
 
 ### Quality Control
 
 1. **Sequence clustering**: 30% identity threshold using MMseqs2
-2. **Stratified splitting**: Balanced contact rates across splits
-3. **No data leakage**: Proteins from same cluster in same split
+2. **Cluster-level splitting**: Entire clusters assigned to same split
+3. **No data leakage**: No protein in test shares >30% identity with training
 
 ## Reproducing the Dataset
 
-To regenerate the dataset from scratch:
-
 ```bash
-# Step 1: Query RCSB for lipid-containing structures
-python scripts/01_query_rcsb_lipids.py --output data/interim/
+# Single command to regenerate the entire dataset from RCSB
+python scripts/run_rcsb_only_pipeline.py
 
-# Step 2: Download PDB structures
-python scripts/02_download_structures.py --input data/interim/rcsb_lipids.json
-
-# Step 3: Calculate contacts
-python scripts/03_calculate_contacts.py --cutoff 4.0
-
-# Step 4: Cluster sequences
-python scripts/04_cluster_sequences.py --identity 0.3
-
-# Step 5: Create train/val/test splits
-python scripts/05_create_splits.py --train 0.6 --val 0.2 --test 0.2
+# With options
+python scripts/run_rcsb_only_pipeline.py --skip-rcsb-query  # Use cached RCSB results
+python scripts/run_rcsb_only_pipeline.py --max-proteins 100  # Test with subset
 ```
 
-## Comparison with Existing Datasets
+## Limitations
 
-| Dataset | Proteins | Label Source | Public |
-|---------|----------|--------------|--------|
-| DREAMM | 54 | Experimental | Limited |
-| OPM-derived | 15,096 | Computational | Yes |
-| **MPLID** | **2,792** | **Experimental** | **Yes** |
-
-MPLID provides 52x more proteins than DREAMM while maintaining experimental validation.
+1. **Crystallization artifacts**: Some lipid contacts may reflect crystallization conditions rather than native interactions
+2. **Detergents included**: Dataset includes detergent molecules used in crystallization
+3. **Static structures**: Does not capture dynamic or transient lipid interactions
+4. **Class imbalance**: 0.94% positive rate requires specialized ML techniques
 
 ## Citation
 
-If you use this dataset in your research, please cite:
+If you use this dataset, please cite:
 
 ```bibtex
 @article{omage2026mplid,
-  author = {Omage, Folorunsho Bright},
-  title = {{MPLID}: A Large-Scale Experimentally-Validated Dataset of
-           Membrane Protein-Lipid Interface Residues},
+  author = {Omage, Folorunsho Bright and Mazoni, Ivan and Yano, Inácio Henrique and Neshich, Goran},
+  title = {{MPLID}: A Large-Scale Dataset of Experimentally Validated Membrane Protein-Lipid Contact Residues for Machine Learning},
   journal = {GigaScience},
   year = {2026},
-  volume = {XX},
-  pages = {XXX},
   doi = {10.5281/zenodo.18487585}
 }
 ```
@@ -195,7 +195,7 @@ If you use this dataset in your research, please cite:
 ## License
 
 - **Code**: MIT License (see [LICENSE](LICENSE))
-- **Data**: [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+- **Data**: [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/) (Public Domain)
 
 ## Acknowledgments
 

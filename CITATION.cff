@@ -7,15 +7,25 @@ authors:
     family-names: Omage
     orcid: "https://orcid.org/0000-0002-9750-5034"
     email: "omagefolorunsho@gmail.com"
-    affiliation: "Embrapa Agricultural Informatics"
+    affiliation: "Embrapa Digital Agriculture"
+  - given-names: Ivan
+    family-names: Mazoni
+    affiliation: "Embrapa Digital Agriculture"
+  - given-names: Inácio Henrique
+    family-names: Yano
+    affiliation: "Embrapa Digital Agriculture"
+  - given-names: Goran
+    family-names: Neshich
+    email: "goran.neshich@embrapa.br"
+    affiliation: "Embrapa Digital Agriculture"
 repository-code: "https://github.com/omagebright/MPLID"
 url: "https://github.com/omagebright/MPLID"
 abstract: >-
-  A large-scale, experimentally-validated dataset of membrane
-  protein-lipid contact residues derived from crystallographic
-  structures in the Protein Data Bank. Contains 4.7 million
-  residues from 2,792 membrane proteins with experimentally-
-  determined lipid contacts.
+  A large-scale dataset of experimentally validated lipid contact
+  residues derived from crystallographic structures in the Protein
+  Data Bank. Contains 10.5 million residues from 7,541 proteins
+  with crystallized lipid molecules, using 100% crystallographic
+  labels with no computational database dependencies.
 keywords:
   - membrane proteins
   - lipid interactions
@@ -23,9 +33,10 @@ keywords:
   - machine learning
   - benchmark dataset
   - structural biology
+  - crystallography
 license: MIT
-version: "1.0.0"
-date-released: "2026-02-01"
+version: "2.0.0"
+date-released: "2026-02-06"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.18487585"
@@ -36,6 +47,12 @@ preferred-citation:
     - given-names: Folorunsho Bright
       family-names: Omage
       orcid: "https://orcid.org/0000-0002-9750-5034"
-  title: "MPLID: A Large-Scale Experimentally-Validated Dataset of Membrane Protein-Lipid Interface Residues"
+    - given-names: Ivan
+      family-names: Mazoni
+    - given-names: Inácio Henrique
+      family-names: Yano
+    - given-names: Goran
+      family-names: Neshich
+  title: "MPLID: A Large-Scale Dataset of Experimentally Validated Membrane Protein-Lipid Contact Residues for Machine Learning"
   journal: "GigaScience"
   year: 2026

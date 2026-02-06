@@ -39,17 +39,19 @@ Splits are performed at the cluster level using 30% sequence identity to prevent
 
 MPLID derives labels **directly from PDB crystallographic coordinates**. A residue is labeled positive if its Cα atom is within 4.0 Å of any heavy atom of a crystallized lipid molecule. No computational predictions, no membrane plane algorithms, no literature curation required.
 
-### Comparison with DREAMM
+### Comparison with Other Datasets
+
+MPLID and other protein-lipid datasets answer **different biological questions**:
 
 | Aspect | DREAMM | MPLID |
 |--------|--------|-------|
 | Label source | Literature curation (EPR, fluorescence, mutagenesis) | PDB crystallography |
 | Biological question | Functional membrane contact | Structural lipid proximity |
-| Proteins | 54 | 7,541 (140× more) |
-| Residues | ~15,000 | 10,486,965 (699× more) |
+| Protein scope | Peripheral membrane proteins | All proteins with crystallized lipids |
+| Proteins | 54 | 7,541 |
 | Reproducibility | Requires literature access | Fully automated from PDB |
 
-Both datasets use experimental data but answer **different biological questions**. DREAMM identifies residues that functionally interact with membranes; MPLID identifies residues structurally proximate to crystallized lipids.
+**Important**: DREAMM identifies residues that functionally interact with membranes through biophysical experiments; MPLID identifies residues structurally proximate to crystallized lipids. These are complementary approaches, not directly comparable benchmarks. Models trained on one may not transfer to the other.
 
 ## Installation
 

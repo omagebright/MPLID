@@ -38,20 +38,13 @@
 - **Verification**: Repository exists at https://github.com/omagebright/MPLID (HTTP 200)
 - **Result**: No action needed - repo is accessible
 
-## User Action Required
-
-### Zenodo DOI - REQUIRES USER ACTION
-- **Issue**: Zenodo DOI (10.5281/zenodo.18487585) is invalid/placeholder
-- **Current State**: Manuscript text updated to "[DOI to be assigned upon deposit]"
-- **Action Needed**:
-  1. Go to https://zenodo.org/deposit/new
-  2. Upload the MPLID dataset files (CSV splits, metadata)
-  3. Fill in metadata (title, authors, license CC0)
-  4. Publish to get DOI
-  5. Update manuscript with real DOI in two locations:
-     - Line ~336: "Availability of Supporting Source Code and Data" section
-     - Line ~362: "Data availability" section
-  6. Update references.bib `zenodo_mplid` entry with actual DOI
+## Zenodo DOI - RESTORED
+- **DOI**: 10.5281/zenodo.18487585
+- **Status**: Restored in manuscript (was incorrectly marked as placeholder)
+- **Locations updated**:
+  - "Availability of Supporting Source Code and Data" section
+  - "Data availability" section
+  - references.bib `zenodo_mplid` entry
 
 ## Files Modified
 - `/MPLID_paper/manuscript/main_gigascience.tex` - All critical fixes

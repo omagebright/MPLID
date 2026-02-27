@@ -39,7 +39,7 @@ version: "2.0.0"
 date-released: "2026-02-06"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.18487585"
+    value: "10.5281/zenodo.18487584"
     description: "Zenodo archive of the dataset"
 preferred-citation:
   type: article

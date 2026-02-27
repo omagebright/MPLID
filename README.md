@@ -1,6 +1,6 @@
 # MPLID: Membrane Protein-Lipid Interface Dataset
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18487585.svg)](https://doi.org/10.5281/zenodo.18487585)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18487584.svg)](https://doi.org/10.5281/zenodo.18487584)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Data: CC0](https://img.shields.io/badge/Data-CC0%201.0-lightgrey.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -195,7 +195,7 @@ If you use this dataset, please cite:
   title = {{MPLID} ({Membrane Protein-Lipid Interaction Database}): A Large-Scale Experimental Resource of Residue-Level Protein-Lipid Contacts},
   journal = {GigaScience},
   year = {2026},
-  doi = {10.5281/zenodo.18487585}
+  doi = {10.5281/zenodo.18487584}
 }
 ```
 

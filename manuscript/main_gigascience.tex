@@ -29,8 +29,8 @@
 
 \corresp[$\ast$]{Corresponding authors. \href{mailto:omagefolorunsho@gmail.com}{omagefolorunsho@gmail.com}; \href{mailto:goran.neshich@embrapa.br}{goran.neshich@embrapa.br}}
 
-\abstract{\textbf{Context:} Membrane proteins constitute approximately 20--30\% of all proteomes and represent over 60\% of current drug targets. Although protein--lipid interactions play important structural and regulatory roles in membrane-associated proteins, most existing structural resources focus on identifying whether a residue lies within a membrane region, typically inferred from computational hydrophobicity-based positioning algorithms. This approach does not directly address a distinct biological question: which residues at the protein surface make direct physical contact with lipid molecules? Answering this question from experimental data is critical for understanding lipid-mediated allostery, designing lipid-mimetic therapeutics, and training accurate machine learning models for lipid binding site prediction.
-\textbf{Findings:} We present MPLID (Membrane Protein-Lipid Interaction Database), a curated residue-level dataset comprising 4,704 membrane proteins representing 813 sequence families at 30\% identity, 8,055,325 residues, and 80,439 experimentally validated lipid contact annotations (1.00\% positive rate). Labels are derived exclusively from crystallized lipid molecules resolved in Protein Data Bank structures, using a 4.0~\AA{} all-atom heavy-atom distance cutoff: a residue is labeled as a contact if any of its heavy atoms lies within 4.0~\AA{} of any lipid heavy atom, capturing direct van der Waals interactions including side-chain contacts. The dataset recognizes 117 lipid codes spanning phospholipids, cardiolipin, sphingolipids, sterols, fatty acids, glycerolipids, detergent mimetics, lipid A components, and CHARMM simulation nomenclature, covering the full diversity of lipid species encountered in experimental membrane protein structures. To prevent data leakage, proteins are clustered at 30\% sequence identity using MMseqs2, yielding 813 clusters that are partitioned into training (2,578 proteins), validation (1,051 proteins), and test (1,075 proteins) splits. Amino acid composition analysis reveals biologically consistent enrichment at lipid contact sites, with tryptophan (1.88$\times$), arginine (1.44$\times$), glycine (1.36$\times$), lysine (1.33$\times$), and phenylalanine (1.23$\times$) showing the strongest enrichment, while negatively charged and $\beta$-branched residues are depleted (proline 0.51$\times$, isoleucine 0.57$\times$, aspartate 0.59$\times$).
+\abstract{\textbf{Background:} Membrane proteins constitute approximately 20--30\% of all proteomes and represent over 60\% of current drug targets. Although protein--lipid interactions play important structural and regulatory roles in membrane-associated proteins, most existing structural resources focus on identifying whether a residue lies within a membrane region, typically inferred from computational hydrophobicity-based positioning algorithms. This approach does not directly address a distinct biological question: which residues at the protein surface make direct physical contact with lipid molecules? Answering this question from experimental data is critical for understanding lipid-mediated allostery, designing lipid-mimetic therapeutics, and training accurate machine learning models for lipid binding site prediction.
+\textbf{Findings:} We present MPLID (Membrane Protein-Lipid Interaction Database), a curated residue-level dataset comprising 4,704 membrane proteins representing 813 sequence clusters at 30\% identity, 8,055,325 residues, and 80,439 experimentally validated lipid contact annotations (1.00\% positive rate). Labels are derived exclusively from crystallized lipid molecules resolved in Protein Data Bank structures, using a 4.0~\AA{} all-atom heavy-atom distance cutoff: a residue is labeled as a contact if any of its heavy atoms lies within 4.0~\AA{} of any lipid heavy atom, capturing direct van der Waals interactions including side-chain contacts. The dataset recognizes 117 lipid codes spanning phospholipids, cardiolipin, sphingolipids, sterols, fatty acids, glycerolipids, detergent mimetics, lipid A components, and CHARMM simulation nomenclature, covering the full diversity of lipid species encountered in experimental membrane protein structures. To prevent data leakage, proteins are clustered at 30\% sequence identity using MMseqs2, yielding 813 clusters that are partitioned into training (2,578 proteins), validation (1,051 proteins), and test (1,075 proteins) splits. Amino acid composition analysis reveals biologically consistent enrichment at lipid contact sites, with tryptophan (1.88$\times$), arginine (1.44$\times$), glycine (1.36$\times$), lysine (1.33$\times$), and phenylalanine (1.23$\times$) showing the strongest enrichment, while negatively charged and $\beta$-branched residues are depleted (proline 0.51$\times$, isoleucine 0.57$\times$, aspartate 0.59$\times$).
 \textbf{Conclusions:} MPLID addresses a distinct biological question compared to existing membrane zone datasets: identifying residues that directly contact lipid molecules rather than those positioned within the membrane hydrophobic slab. With 4,704 proteins and over 8 million annotated residues, MPLID provides the scale and diversity needed for training deep learning models for lipid contact prediction, a task with direct applications in structure-guided drug design and membrane protein engineering. The dataset adheres to FAIR principles and is freely available under a CC0 public domain dedication. MPLID is intended as a ground-truth resource for residue-level lipid contact annotation and does not aim, by itself, to provide an optimized predictive solution to the full experimental-only classification problem.}
 
 \keywords{membrane proteins, lipid-protein interactions, protein structure, machine learning dataset, structural biology, experimental validation, residue-level classification, FAIR data}
@@ -39,7 +39,7 @@
 
 
 % ============================================================
-\section{Context}
+\section{Background}
 % ============================================================
 
 Membrane proteins are central to virtually all cellular processes, mediating transport of ions and solutes, signal transduction, energy conversion, and cell adhesion \cite{wallin1998}. Genomic analyses consistently estimate that 20--30\% of open reading frames in any given proteome encode membrane proteins \cite{wallin1998}, and pharmacological surveys have established that these proteins account for more than 60\% of all current drug targets \cite{overington2006, santos2017}. Despite their biomedical importance, membrane proteins remain among the most challenging targets for structural and computational biology, in large part because their native functional context, the lipid bilayer, is difficult to recapitulate experimentally and model computationally.
@@ -87,7 +87,7 @@ On the prediction methodology side, the DREAMM method \cite{chatzigoulas2022} de
 
 The convergence of three trends motivates the creation of MPLID. First, the rapid growth of the Protein Data Bank \cite{berman2000, burley2023}, which now contains more than 230,000 structures, means that thousands of membrane protein structures with resolved lipid molecules are available for systematic analysis. Second, advances in protein language models such as ESM-2 \cite{lin2023} and ProtTrans \cite{elnaggar2022} have demonstrated that per-residue embeddings trained on large-scale protein sequence data can capture structural and functional properties, but training supervised models on top of these representations requires large labeled datasets. Third, structure-guided drug discovery increasingly recognizes lipid binding sites as druggable targets for allosteric modulation \cite{chatzigoulas2022server, duncan2020}, creating demand for systematic catalogs of experimentally validated lipid interaction sites.
 
-MPLID addresses these needs by providing experimentally validated lipid contact annotations for 4,704 membrane proteins containing 8,055,325 residues. All labels derive from crystallized lipid molecules in PDB structures, ensuring experimental ground truth at atomic resolution. Unlike prior resources that are limited in scale or scope, MPLID covers integral, peripheral, and single-pass membrane proteins across 813 sequence-diverse families.
+MPLID addresses these needs by providing experimentally validated lipid contact annotations for 4,704 membrane proteins containing 8,055,325 residues. All labels derive from crystallized lipid molecules in PDB structures, ensuring experimental ground truth at atomic resolution. Unlike prior resources that are limited in scale or scope, MPLID covers integral, peripheral, and single-pass membrane proteins across 813 sequence-diverse clusters.
 
 
 % ============================================================
@@ -96,29 +96,9 @@ MPLID addresses these needs by providing experimentally validated lipid contact 
 
 \subsection{Dataset overview}
 
-MPLID provides residue-level binary annotations indicating whether each residue in a membrane protein makes direct physical contact with a crystallized lipid molecule. The complete dataset encompasses 4,704 membrane proteins with a total of 8,055,325 residues, of which 80,439 (1.00\%) are labeled as lipid contacts (Table~\ref{tab:overview}). This positive rate reflects the biological reality that only a small fraction of residues in membrane proteins make direct lipid contacts within 4.0~\AA{}, primarily at protein surfaces, interfacial regions, and lipid-binding pockets. The remaining residues are located in solvent-exposed domains, protein-protein interfaces, or interior regions of multi-subunit complexes.
+MPLID provides residue-level binary annotations indicating whether each residue in a membrane protein makes direct physical contact with a crystallized lipid molecule. The complete dataset encompasses 4,704 membrane proteins with a total of 8,055,325 residues, of which 80,439 (1.00\%) are labeled as lipid contacts (Figure~\ref{fig:overview}). This positive rate reflects the biological reality that only a small fraction of residues in membrane proteins make direct lipid contacts within 4.0~\AA{}, primarily at protein surfaces, interfacial regions, and lipid-binding pockets. The remaining residues are located in solvent-exposed domains, protein-protein interfaces, or interior regions of multi-subunit complexes.
 
-\begin{table}[tbp]
-\centering
-\caption{MPLID dataset summary statistics. All labels are derived from crystallized lipid molecules in PDB structures using a 4.0~\AA{} all-atom heavy-atom distance cutoff.}
-\label{tab:overview}
-\begin{tabular}{@{}lr@{}}
-\toprule
-\textbf{Metric} & \textbf{Value} \\
-\midrule
-Total proteins & 4,704 \\
-Total residues & 8,055,325 \\
-Lipid contact residues & 80,439 \\
-Contact rate & 1.00\% \\
-Sequence clusters (30\% identity) & 813 \\
-Recognized lipid codes & 117 \\
-Distance cutoff & 4.0~\AA{} (all-atom) \\
-Label source & Experimental (PDB) \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Proteins in the dataset range from 22 to 15,280 residues (median 1,038; mean 1,712), reflecting the diversity of membrane protein sizes from small single-pass transmembrane peptides to large multi-subunit complexes. The number of lipid contacts per protein ranges from 1 to 4,820 (median 4; mean 17), with the highly skewed distribution reflecting that most proteins have few resolved lipid contacts while a small number of well-characterized complexes have extensive lipid interactions. Every protein in the final dataset has at least one lipid contact, as proteins with zero contacts were removed during quality filtering (Section~Methods).
+Proteins in the dataset range from 22 to 15,280 residues (median 1,038; mean 1,712), reflecting the diversity of membrane protein sizes from small single-pass transmembrane peptides to large multi-subunit complexes. The number of lipid contacts per protein ranges from 1 to 4,820 (median 4; mean 17), with the highly skewed distribution reflecting that most proteins have few resolved lipid contacts while a small number of well-characterized complexes have extensive lipid interactions. Every protein in the final dataset has at least one lipid contact, as proteins with zero contacts were removed during quality filtering (see Methods).
 
 \subsection{Data schema and format}
 
@@ -128,24 +108,7 @@ Data are distributed as gzip-compressed comma-separated values (CSV) files parti
 
 \subsection{Train/validation/test splits}
 
-The dataset is partitioned into training (2,578 proteins; 4,907,696 residues), validation (1,051 proteins; 1,403,838 residues), and test (1,075 proteins; 1,743,791 residues) splits (Table~\ref{tab:splits}; Figure~\ref{fig:overview}). Critically, splitting is performed at the protein level with cluster-aware stratification: proteins within the same sequence cluster are always assigned to the same split, preventing data leakage from sequence-similar proteins appearing in both training and evaluation partitions. This design choice is essential for meaningful generalization assessment, as protein-level leakage can dramatically inflate performance estimates in structural bioinformatics tasks.
-
-\begin{table}[tbp]
-\centering
-\caption{Train/validation/test split statistics. Proteins within the same sequence cluster (30\% identity) are always assigned to the same split. Contact rates vary slightly across splits due to cluster-level stratification.}
-\label{tab:splits}
-\begin{tabular}{@{}lrrrr@{}}
-\toprule
-\textbf{Split} & \textbf{Proteins} & \textbf{Residues} & \textbf{Contacts} & \textbf{Rate (\%)} \\
-\midrule
-Training & 2,578 & 4,907,696 & 56,976 & 1.16 \\
-Validation & 1,051 & 1,403,838 & 9,626 & 0.69 \\
-Test & 1,075 & 1,743,791 & 13,837 & 0.79 \\
-\midrule
-Total & 4,704 & 8,055,325 & 80,439 & 1.00 \\
-\bottomrule
-\end{tabular}
-\end{table}
+The dataset is partitioned into training (2,578 proteins; 4,907,696 residues), validation (1,051 proteins; 1,403,838 residues), and test (1,075 proteins; 1,743,791 residues) splits (Figure~\ref{fig:overview}). Critically, splitting is performed at the protein level with cluster-aware stratification: proteins within the same sequence cluster are always assigned to the same split, preventing data leakage from sequence-similar proteins appearing in both training and evaluation partitions. Contact rates vary across splits (training 1.16\%, validation 0.69\%, test 0.79\%) because stratification is performed at the cluster level rather than the residue level, and clusters with higher contact rates may be unevenly distributed. This variation is expected and should be accounted for when comparing model performance across splits. This design choice is essential for meaningful generalization assessment, as protein-level leakage can dramatically inflate performance estimates in structural bioinformatics tasks.
 
 \begin{figure*}[tbp]
 \centering
@@ -158,11 +121,18 @@ The cluster-aware splitting strategy uses MMseqs2 \cite{steinegger2017} with a 3
 
 \subsection{Sequence clustering analysis}
 
-The 813 sequence clusters exhibit a highly skewed size distribution, reflecting the sequence diversity of membrane proteins across different families and superfamilies. This clustering pattern indicates substantial structural and functional diversity in the dataset, as singleton clusters represent unique membrane protein families without close homologs.
+The 813 sequence clusters exhibit a highly skewed size distribution (Figure~\ref{fig:cluster}), with 373 singletons (45.9\%) and a largest cluster of 173 proteins, reflecting the sequence diversity of membrane proteins across different families and superfamilies. This clustering pattern indicates substantial structural and functional diversity in the dataset, as singleton clusters represent unique membrane protein families without close homologs.
+
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=\textwidth]{fig6_cluster_analysis.pdf}
+\caption{Sequence cluster analysis. (A) Distribution of cluster sizes at 30\% sequence identity on a log scale, showing a highly skewed size distribution with many singletons and a small number of large clusters containing many homologous structures. (B) Cumulative protein coverage ranked by cluster size, illustrating the concentration of proteins in a few large families.}
+\label{fig:cluster}
+\end{figure*}
 
 
 % ============================================================
-\section{Data Validation}
+\section{Analyses}
 % ============================================================
 
 \subsection{Amino acid composition at lipid contact sites}
@@ -176,7 +146,7 @@ Analysis of amino acid enrichment at lipid contact sites reveals biologically me
 \label{fig:enrichment}
 \end{figure*}
 
-Among depleted residues, proline (0.51$\times$) and isoleucine (0.57$\times$) show the strongest depletion. Proline disrupts regular secondary structure and is underrepresented at smooth lipid-protein interfaces. The depletion of isoleucine, a $\beta$-branched hydrophobic residue, may reflect its preference for buried core positions rather than surface lipid contacts. Aspartate (0.59$\times$) is depleted, consistent with the electrostatic incompatibility of negatively charged side chains with the lipid bilayer interior. Asparagine (0.71$\times$) and valine (0.73$\times$) are moderately depleted. Threonine (0.87$\times$) and glutamine (0.89$\times$) show mild depletion, while alanine (0.94$\times$) and glutamate (0.97$\times$) are near neutral. Overall, the enrichment pattern strongly supports the biological validity of the all-atom contact definition: residues capable of electrostatic interactions with phospholipid headgroups (arginine, lysine) and aromatic anchoring at the interface (tryptophan, phenylalanine) are enriched, while conformationally constrained (proline) and $\beta$-branched (isoleucine, valine) residues are depleted.
+Among depleted residues, proline (0.51$\times$) and isoleucine (0.57$\times$) show the strongest depletion. Proline disrupts regular secondary structure and is underrepresented at smooth lipid-protein interfaces. The depletion of isoleucine, a $\beta$-branched hydrophobic residue, may reflect its preference for buried core positions rather than surface lipid contacts. Aspartate (0.59$\times$) is depleted, consistent with the electrostatic incompatibility of negatively charged side chains with the lipid bilayer interior. Asparagine (0.71$\times$) and valine (0.73$\times$) are moderately depleted. Threonine (0.87$\times$) and glutamine (0.89$\times$) show mild depletion, while alanine (0.94$\times$) and glutamate (0.97$\times$) are near neutral. Overall, the enrichment pattern strongly supports the biological validity of the all-atom contact definition: residues capable of electrostatic interactions with phospholipid headgroups (arginine, lysine) and aromatic anchoring at the interface (tryptophan, phenylalanine) are enriched, while conformationally constrained (proline) and $\beta$-branched (isoleucine, valine) residues are depleted. Given the large sample sizes (80,439 contact residues among 8,055,325 total residues), these enrichment and depletion patterns are robust and unlikely to arise from sampling variation.
 
 \subsection{Distance distribution analysis}
 
@@ -191,7 +161,7 @@ The distribution of minimum distances between protein residues and lipid molecul
 
 \subsection{Protein size and contact density distributions}
 
-The distribution of protein sizes in MPLID spans three orders of magnitude, reflecting the diversity of membrane protein families represented (Figure~\ref{fig:proteinstats}). Contact density, defined as the fraction of residues making lipid contacts, varies substantially across proteins. The overall contact rate of 1.00\% reflects a severe class imbalance (approximately 100:1 negative-to-positive ratio) inherent to this prediction task, which requires specialized machine learning approaches such as class weighting or focal loss.
+The distribution of protein sizes in MPLID spans three orders of magnitude, reflecting the diversity of membrane protein families represented (Figure~\ref{fig:proteinstats}). Contact density, defined as the fraction of residues making lipid contacts, varies substantially across proteins, with a per-protein median contact rate of 0.45\% and a mean of 0.99\%. The overall contact rate of 1.00\% reflects a severe class imbalance (approximately 100:1 negative-to-positive ratio) inherent to this prediction task, which requires specialized machine learning approaches such as class weighting or focal loss.
 
 \begin{figure*}[tbp]
 \centering
@@ -244,8 +214,19 @@ To illustrate the nature of the lipid contact annotations in MPLID, representati
 \begin{figure*}[tbp]
 \centering
 \includegraphics[width=\textwidth]{fig7_structural_visualization.pdf}
-\caption{Structural visualization of MPLID lipid contact annotations across four representative membrane protein classes. (A) A\textsubscript{2A} adenosine receptor (PDB: 5NM2), a GPCR with 41 contact residues and four lipid types (oleic acid, cholesterol). (B) ADP/ATP carrier AAC3 (PDB: 4C9J), a mitochondrial transporter with 33 cardiolipin contact residues across two chains. (C) MurJ flippase (PDB: 5T77), a lipid II flippase with 33 contacts distributed across its transmembrane helices. (D) Fragaceatoxin C (PDB: 4TSY), a tetrameric pore-forming toxin with 28 sphingolipid contacts at the membrane insertion interface. These examples demonstrate that lipid contacts are site-specific rather than uniformly distributed across membrane-exposed surfaces.}
+\caption{Structural visualization of MPLID lipid contact annotations across four representative membrane protein classes. (A) A\textsubscript{2A} adenosine receptor (PDB: 5NM2), a GPCR with multiple lipid types including oleic acid and cholesterol. (B) ADP/ATP carrier AAC3 (PDB: 4C9J), a mitochondrial transporter with cardiolipin contact residues across two chains. (C) MurJ flippase (PDB: 5T77), a lipid II flippase with contacts distributed across its transmembrane helices. (D) Fragaceatoxin C (PDB: 4TSY), a tetrameric pore-forming toxin with sphingolipid contacts at the membrane insertion interface. These examples demonstrate that lipid contacts are site-specific rather than uniformly distributed across membrane-exposed surfaces.}
 \label{fig:structures}
+\end{figure*}
+
+\subsection{Computational label comparison studies}
+
+The availability of MPLID alongside OPM membrane zone annotations enables systematic comparison of experimental lipid contacts with computational membrane boundaries. We compared MPLID contact labels with OPM-derived membrane zone assignments across proteins present in both resources (Figure~\ref{fig:opm_comparison}). The number of overlapping proteins varies by analysis: 2,383 proteins contributed to precision estimates, 1,685 to recall estimates, and 2,457 to contact distribution analysis, reflecting differences in the availability of OPM membrane zone annotations and non-zero lipid contacts across the shared set. Of all MPLID lipid contacts in the shared set ($n = 28{,}497$ residues), 51.2\% fell within the OPM membrane zone while 48.8\% were located outside the computationally defined boundaries, likely reflecting interfacial contacts, re-entrant loops, or amphipathic helices that extend beyond the hydrophobic core. Conversely, 98.8\% of OPM membrane zone residues ($n = 1{,}170{,}590$) showed no direct lipid contact within 4.0~\AA{}, and the per-protein median was only 0.7\% of membrane zone residues having lipid contacts. The OPM membrane zone captured a median of 50.0\% of lipid contacts per protein. These dataset-wide statistics highlight the fundamental difference between membrane zone classification and lipid contact prediction: being embedded in the membrane is neither sufficient nor necessary for direct lipid interaction. Researchers working with MemProtMD \cite{newport2019} simulations can similarly compare simulated lipid contacts with the experimental contacts provided by MPLID.
+
+\begin{figure*}[tbp]
+\centering
+\includegraphics[width=\textwidth]{fig8_opm_comparison.pdf}
+\caption{Quantitative comparison of MPLID lipid contacts versus OPM membrane zone annotations. (A) Residue classification overlap: 48.8\% of lipid contacts ($n = 28{,}497$) fall outside the OPM membrane zone, while 98.8\% of OPM zone residues ($n = 1{,}170{,}590$) lack direct lipid contact. (B) Per-protein OPM precision ($n = 2{,}383$ proteins): median 0.7\% of membrane zone residues have lipid contacts. (C) Per-protein OPM recall ($n = 1{,}685$ proteins): the membrane zone captures a median of 50.0\% of lipid contacts. (D) Per-protein scatter of contacts inside versus outside the OPM zone ($n = 2{,}457$ proteins). These results demonstrate that membrane zone classification and lipid contact annotation address fundamentally different biological questions.}
+\label{fig:opm_comparison}
 \end{figure*}
 
 
@@ -255,7 +236,7 @@ To illustrate the nature of the lipid contact annotations in MPLID, representati
 
 \subsection{Data source integration}
 
-MPLID was constructed using a purely experimental approach with no dependence on computational membrane positioning databases. OPM data were not used at any stage of the MPLID construction pipeline; OPM is discussed in this paper solely to contextualize the complementary biological questions of membrane zone positioning versus direct lipid contact annotation. All residue annotations in MPLID derive exclusively from experimentally resolved lipid molecules in PDB structures. The RCSB Protein Data Bank \cite{berman2000, burley2023} was queried programmatically for all structures containing recognized lipid chemical components, identifying 8,221 candidate structures with lipid ligands. This query-first strategy ensures that every protein in the dataset has at least one experimentally resolved lipid molecule, providing an unbiased sampling of protein-lipid interactions across all structural classes. The identified structures were downloaded and processed through the contact calculation and quality filtering pipeline (Figure~\ref{fig:cluster}).
+MPLID was constructed using a purely experimental approach with no dependence on computational membrane positioning databases. OPM data were not used at any stage of the MPLID construction pipeline; OPM is discussed in this paper solely to contextualize the complementary biological questions of membrane zone positioning versus direct lipid contact annotation. All residue annotations in MPLID derive exclusively from experimentally resolved lipid molecules in PDB structures. The RCSB Protein Data Bank \cite{berman2000, burley2023} was queried programmatically for all structures containing recognized lipid chemical components, identifying 8,221 candidate structures with lipid ligands. This query-first strategy ensures that every protein in the dataset has at least one experimentally resolved lipid molecule, providing an unbiased sampling of protein-lipid interactions across all structural classes. The identified structures were downloaded as original PDB coordinate files (9,796 files total, as some entries required retrieval of biological assembly files or alternate depositions). After parsing, 5,723 unique proteins yielded valid structures with recognized HETATM lipid records; the remainder comprised duplicate chains, structures that failed parsing, or entries lacking standard amino acid residues. These were processed through the contact calculation and quality filtering pipeline described in the following subsections.
 
 \subsection{Lipid molecule identification}
 
@@ -276,18 +257,11 @@ d_{\min}(R, L) = \min_{a \in R,\, b \in L} \| \mathbf{r}_a - \mathbf{r}_b \| \le
 
 \subsection{Quality filtering}
 
-Of the 8,221 candidate structures initially identified via RCSB queries, 9,796 PDB files were downloaded (including structures with multiple lipid types). After processing, 5,723 proteins yielded parseable structures. Of these, 1,011 were removed because they contained only non-lipid molecules misannotated as lipids (such as HEPES buffer and bacteriochlorophyll) or had all lipid atoms beyond the 4.0~\AA{} contact threshold, leaving 4,712 proteins with at least one genuine lipid contact. After sequence clustering and split assignment, the final dataset contains 4,704 proteins. This filtering ensures that every protein in the dataset has genuine, experimentally resolved lipid contacts.
+Of the 5,723 proteins with parseable lipid-containing structures, 1,019 were removed because they contained only non-lipid molecules misannotated as lipids (such as HEPES buffer and bacteriochlorophyll) or had all lipid atoms beyond the 4.0~\AA{} contact threshold, leaving 4,704 proteins with at least one genuine lipid contact. This filtering ensures that every protein in the final dataset has genuine, experimentally resolved lipid contacts.
 
 \subsection{Sequence clustering}
 
 To prevent data leakage between training, validation, and test splits, all 4,704 proteins were clustered using MMseqs2 \cite{steinegger2017} with a 30\% sequence identity threshold and 80\% bidirectional alignment coverage. These stringent thresholds ensure that proteins assigned to different splits are sufficiently divergent in sequence to represent independent test cases. The clustering produced 813 clusters.
-
-\begin{figure*}[tbp]
-\centering
-\includegraphics[width=\textwidth]{fig6_cluster_analysis.pdf}
-\caption{Sequence cluster analysis. (A) Distribution of cluster sizes at 30\% sequence identity on a log scale, showing a highly skewed size distribution with many singletons and a small number of large clusters containing many homologous structures. (B) Cumulative protein coverage ranked by cluster size, illustrating the concentration of proteins in a few large families.}
-\label{fig:cluster}
-\end{figure*}
 
 \subsection{Split strategy}
 
@@ -299,8 +273,14 @@ The MPLID construction pipeline was implemented in Python 3.11.8 using BioPython
 
 
 % ============================================================
-\section{Limitations}
+\section{Discussion}
 % ============================================================
+
+MPLID represents the first large-scale, publicly deposited dataset of experimentally validated residue-level lipid contacts for membrane proteins. The dataset addresses a biological question that is fundamentally distinct from membrane zone classification: rather than identifying residues located within a computationally defined hydrophobic slab, MPLID annotates residues that make direct physical contact with crystallized lipid molecules at atomic resolution. The analyses presented here validate this annotation approach through multiple independent lines of evidence. The amino acid enrichment patterns at lipid contact sites are biologically consistent, with aromatic anchoring residues (tryptophan, phenylalanine) and positively charged residues (arginine, lysine) enriched at contact sites, while conformationally constrained (proline) and negatively charged (aspartate) residues are depleted. The distance distribution analysis confirms that the 4.0~\AA{} cutoff effectively captures the van der Waals contact boundary. The quantitative comparison with OPM membrane zone annotations demonstrates that nearly half of experimentally observed lipid contacts fall outside computationally predicted membrane boundaries, reinforcing the complementary nature of these two resources.
+
+The scale of MPLID, comprising 4,704 proteins across 813 sequence clusters, provides substantially greater coverage than prior experimental lipid contact datasets. The DREAMM training set \cite{chatzigoulas2022}, the largest previously available collection, contained 54 peripheral membrane proteins. MPLID expands this by nearly two orders of magnitude while covering all membrane protein classes, including integral, peripheral, and single-pass proteins. The cluster-aware splitting strategy, using a conservative 30\% sequence identity threshold, ensures that evaluation on the test set reflects genuine generalization rather than sequence memorization.
+
+\subsection{Limitations}
 
 Several limitations should be noted when using MPLID. First, lipid contact labels depend on the crystallographic or cryo-EM resolution and completeness of resolved lipid molecules; many native lipid binding events are not captured because lipids are disordered or stripped during purification and crystallization. Consequently, the false negative rate is likely substantial, and the true positive rate of lipid contacts in membrane proteins is probably higher than the 1.00\% observed in MPLID. Moreover, many structures contain only one or a few resolved lipid molecules, meaning that the observed contacts represent a sparse snapshot of the full lipid-binding landscape rather than a comprehensive map of all possible interaction sites. Second, the inclusion of detergent mimetics as proxy lipids introduces potential noise, as detergent binding sites may not perfectly recapitulate native lipid interactions. Analysis of HETATM records across all processed PDB files shows that approximately 17\% of proteins with recognized lipid molecules contain exclusively detergent mimetics (e.g., dodecyl maltoside, octyl glucoside, lauryldimethylamine oxide) without any physiological lipid species, while an additional 10\% contain both detergent and physiological lipids. This means that for roughly one in six proteins, all contact labels derive from crystallization detergents rather than native lipid species. Third, the dataset inherits biases from the PDB toward well-studied, readily crystallizable membrane protein families, leaving many therapeutically relevant but structurally uncharacterized families underrepresented. Finally, the 4.0~\AA{} distance cutoff is a single threshold that may not be optimal for all lipid types; researchers are encouraged to explore alternative cutoffs using the continuous distance values provided in the dataset. Additionally, because MPLID annotations are derived from static crystallographic and cryo-EM snapshots, they may not fully represent the dynamic nature of protein--lipid interactions in native membrane environments, where lipids undergo lateral diffusion and exchange on nanosecond-to-microsecond timescales. Crystal packing artifacts may also contribute false positive contacts, as lipid molecules resolved in crystal structures can occupy lattice contact interfaces that do not reflect native membrane binding.
 
@@ -312,11 +292,13 @@ Four selenocysteine (SEC) residues in the dataset are all annotated as lipid con
 
 Cross-validation of MPLID labels against the curated dataset used by the DREAMM prediction method \cite{chatzigoulas2022} is planned as future work to assess concordance between the two independently derived annotation approaches.
 
-MPLID is intended as a ground-truth resource for residue-level lipid contact annotation and does not aim, by itself, to provide an optimized predictive solution to the full experimental-only classification problem.
+\subsection{Conclusions}
+
+In summary, MPLID provides a large-scale, experimentally grounded resource that fills a critical gap in the membrane protein structural biology landscape. By distinguishing direct lipid contact from membrane zone localization, the dataset enables a new class of residue-level prediction tasks with direct relevance to drug discovery, protein engineering, and mechanistic understanding of lipid-mediated regulation. The dataset adheres to FAIR principles and is freely available under a CC0 public domain dedication. MPLID is intended as a ground-truth resource for residue-level lipid contact annotation and does not aim, by itself, to provide an optimized predictive solution to the full experimental-only classification problem. As the PDB continues to grow and cryo-EM structures increasingly resolve lipid molecules at higher resolution, future releases of MPLID will expand both the coverage and the annotation granularity of this resource.
 
 
 % ============================================================
-\section{Re-use Potential}
+\section{Potential implications}
 % ============================================================
 
 MPLID is designed to serve as a large-scale training and evaluation resource for multiple research applications in structural bioinformatics, drug discovery, and membrane biology.
@@ -332,17 +314,6 @@ Lipid binding sites on membrane proteins represent an emerging class of druggabl
 \subsection{Structural biology and protein engineering}
 
 Understanding which residues contact lipids is essential for rational membrane protein engineering. Mutations at lipid contact sites can destabilize membrane proteins, alter their trafficking, or modify their functional properties. MPLID provides data to train models that predict which residues are critical for lipid-mediated stability, enabling more informed design of stabilizing mutations for membrane protein crystallization, cryo-EM, or functional studies. Additionally, the dataset supports comparative analysis of lipid contact patterns across protein families, enabling identification of conserved lipid binding motifs and family-specific interaction signatures. Future work incorporating cavity-based structural analysis could further support the observation that many residues located within the membrane region do not form direct lipid contacts, reinforcing the conceptual separation between membrane localization and residue-level interaction. These interpretations are based on static structural snapshots. Incorporation of dynamic information may alter residue--lipid proximity patterns, as conformational fluctuations could transiently modify contact definitions.
-
-\subsection{Computational label comparison studies}
-
-The availability of MPLID alongside OPM membrane zone annotations enables systematic comparison of experimental lipid contacts with computational membrane boundaries. We compared MPLID contact labels with OPM-derived membrane zone assignments across proteins present in both resources (Figure~\ref{fig:opm_comparison}). The number of overlapping proteins varies by analysis: 2,383 proteins contributed to precision estimates, 1,685 to recall estimates, and 2,457 to contact distribution analysis, reflecting differences in the availability of OPM membrane zone annotations and non-zero lipid contacts across the shared set. Of all MPLID lipid contacts in the shared set ($n = 28{,}497$ residues), 51.2\% fell within the OPM membrane zone while 48.8\% were located outside the computationally defined boundaries, likely reflecting interfacial contacts, re-entrant loops, or amphipathic helices that extend beyond the hydrophobic core. Conversely, 98.8\% of OPM membrane zone residues ($n = 1{,}170{,}590$) showed no direct lipid contact within 4.0~\AA{}, and the per-protein median was only 0.7\% of membrane zone residues having lipid contacts. The OPM membrane zone captured a median of 50.0\% of lipid contacts per protein. These dataset-wide statistics highlight the fundamental difference between membrane zone classification and lipid contact prediction: being embedded in the membrane is neither sufficient nor necessary for direct lipid interaction. Researchers working with MemProtMD \cite{newport2019} simulations can similarly compare simulated lipid contacts with the experimental contacts provided by MPLID.
-
-\begin{figure*}[tbp]
-\centering
-\includegraphics[width=\textwidth]{fig8_opm_comparison.pdf}
-\caption{Quantitative comparison of MPLID lipid contacts versus OPM membrane zone annotations. (A) Residue classification overlap: 48.8\% of lipid contacts ($n = 28{,}497$) fall outside the OPM membrane zone, while 98.8\% of OPM zone residues ($n = 1{,}170{,}590$) lack direct lipid contact. (B) Per-protein OPM precision ($n = 2{,}383$ proteins): median 0.7\% of membrane zone residues have lipid contacts. (C) Per-protein OPM recall ($n = 1{,}685$ proteins): the membrane zone captures a median of 50.0\% of lipid contacts. (D) Per-protein scatter of contacts inside versus outside the OPM zone ($n = 2{,}457$ proteins). These results demonstrate that membrane zone classification and lipid contact annotation address fundamentally different biological questions.}
-\label{fig:opm_comparison}
-\end{figure*}
 
 \subsection{Integration with protein language models}
 
@@ -371,7 +342,7 @@ The authors declare that they have no competing interests.
 \section{Funding}
 % ============================================================
 
-This research was funded by the S\~{a}o Paulo Research Foundation (FAPESP) (grant nos. 2023/02691-2, 2025/23708-6).
+This research was funded by the S\~{a}o Paulo Research Foundation (FAPESP) (grant nos. 2023/02691-2, 2025/23708-6). The Article Processing Charge for the publication of this research was funded by the Coordena\c{c}\~{a}o de Aperfei\c{c}oamento de Pessoal de N\'{i}vel Superior (CAPES) (ROR identifier: 00x0ma614). For the purpose of open access, the authors have applied a Creative Commons Attribution (CC BY) license to any Author Accepted Manuscript version arising.
 
 
 % ============================================================

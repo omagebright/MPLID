@@ -71,11 +71,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Proxy for network requests (required at Embrapa)
-PROXY = {
-    "http": "http://proxy.cnptia.embrapa.br:3128",
-    "https": "http://proxy.cnptia.embrapa.br:3128"
-}
+# Proxy for network requests (reads from environment variables if set)
+_http_proxy = os.environ.get("HTTP_PROXY", os.environ.get("http_proxy"))
+_https_proxy = os.environ.get("HTTPS_PROXY", os.environ.get("https_proxy"))
+PROXY = {}
+if _http_proxy:
+    PROXY["http"] = _http_proxy
+if _https_proxy:
+    PROXY["https"] = _https_proxy
 
 
 def query_rcsb_for_lipid_structures() -> Dict[str, List[str]]:

@@ -19,6 +19,7 @@ Usage:
 
 import sys
 import os
+from pathlib import Path
 
 try:
     import pymol
@@ -29,9 +30,10 @@ except ImportError:
 
 pymol.finish_launching(['pymol', '-cq'])
 
-# Paths
-STRUCT_DIR = '/HOMENFS/c60238528073/Art/Exo_Database/Lipid_membrane_protein_interfaces/MPLID_paper/manuscript/figures/structures'
-OUTPUT_DIR = '/HOMENFS/c60238528073/Art/Exo_Database/Lipid_membrane_protein_interfaces/MPLID_paper/manuscript/figures'
+# Resolve paths relative to this script's location
+_SCRIPT_DIR = Path(__file__).resolve().parent
+STRUCT_DIR = str(_SCRIPT_DIR / 'structures')
+OUTPUT_DIR = str(_SCRIPT_DIR)
 
 # Molecules to remove (non-lipid HETATM)
 REMOVE_HETATM = {'HOH', 'SO4', 'CXT', 'NA', 'CL', 'CA', 'ZN', 'MG',

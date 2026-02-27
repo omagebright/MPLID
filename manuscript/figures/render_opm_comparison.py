@@ -14,6 +14,7 @@ Usage:
 
 import sys
 import os
+from pathlib import Path
 
 try:
     import pymol
@@ -24,9 +25,11 @@ except ImportError:
 
 pymol.finish_launching(['pymol', '-cq'])
 
-STRUCT_DIR = '/HOMENFS/60238528073/Art/Exo_Database/Lipid_membrane_protein_interfaces/MPLID_paper/manuscript/figures/structures'
-OPM_DIR = '/HOMENFS/60238528073/Art/Exo_Database/Lipid_membrane_protein_interfaces/data/raw/opm'
-OUTPUT_DIR = '/HOMENFS/60238528073/Art/Exo_Database/Lipid_membrane_protein_interfaces/MPLID_paper/manuscript/figures'
+# Resolve paths relative to this script's location
+_SCRIPT_DIR = Path(__file__).resolve().parent
+STRUCT_DIR = str(_SCRIPT_DIR / 'structures')
+OPM_DIR = os.environ.get('MPLID_OPM_DIR', str(_SCRIPT_DIR.parents[2] / 'data' / 'raw' / 'opm'))
+OUTPUT_DIR = str(_SCRIPT_DIR)
 
 # 5NM2 contact residues from MPLID
 CONTACTS_5NM2 = [3, 5, 6, 7, 9, 11, 19, 22, 23, 28, 43, 47, 57, 61, 65, 68,

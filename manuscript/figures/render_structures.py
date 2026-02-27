@@ -14,6 +14,7 @@ Usage:
 
 import sys
 import os
+from pathlib import Path
 
 # Add pymol to path if needed
 try:
@@ -26,9 +27,10 @@ except ImportError:
 # Initialize PyMOL in quiet mode
 pymol.finish_launching(['pymol', '-cq'])
 
-# Paths
-STRUCT_DIR = '/HOMENFS/60238528073/Art/Exo_Database/Lipid_membrane_protein_interfaces/MPLID_paper/manuscript/figures/structures'
-OUTPUT_DIR = '/HOMENFS/60238528073/Art/Exo_Database/Lipid_membrane_protein_interfaces/MPLID_paper/manuscript/figures'
+# Resolve paths relative to this script's location
+_SCRIPT_DIR = Path(__file__).resolve().parent
+STRUCT_DIR = str(_SCRIPT_DIR / 'structures')
+OUTPUT_DIR = str(_SCRIPT_DIR)
 
 # Known lipid residue names in our structures
 LIPID_NAMES = {

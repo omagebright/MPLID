@@ -217,7 +217,7 @@ The RCSB PDB database is continuously updated. Results may vary slightly
 if structures are added/removed/updated between generation runs.
 
 To reproduce exact results from the paper, use the archived dataset from Zenodo:
-https://doi.org/10.5281/zenodo.18487585
+https://doi.org/10.5281/zenodo.18487584
 
 ## Output File Formats
 
@@ -255,7 +255,7 @@ If you use this dataset or reproduction pipeline, please cite:
   title = {{MPLID}: A Large-Scale Dataset of Experimentally Validated Membrane Protein-Lipid Contact Residues for Machine Learning},
   journal = {GigaScience},
   year = {2026},
-  doi = {10.5281/zenodo.18487585}
+  doi = {10.5281/zenodo.18487584}
 }
 ```
 

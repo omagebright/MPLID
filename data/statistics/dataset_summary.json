@@ -1,21 +1,58 @@
 {
-  "total_proteins": 3192,
-  "total_residues": 5134242,
-  "total_contacts": 38435,
-  "contact_rate": 0.007486012540896981,
-  "sequence_clusters": 594,
+  "pipeline_version": "MPLID v2.1.0 (corrected lipid codes)",
+  "label_source": "EXPERIMENTAL",
+  "distance_cutoff_angstrom": 4.0,
+  "residue_representation": "All heavy atoms (minimum distance)",
+  "total_recognized_lipid_codes": 117,
+  "excluded_codes": ["UNL", "BCL", "UNK", "EPE"],
+  "total_proteins": 4704,
+  "total_residues": 8055325,
+  "total_contacts": 80439,
+  "contact_rate": 0.009986,
+  "sequence_clusters": 813,
+  "sequence_identity_threshold": 0.3,
   "splits": {
     "train": {
-      "proteins": 1840,
-      "residues": 2634209
+      "proteins": 2578,
+      "residues": 4907696,
+      "contacts": 56976,
+      "rate": 0.01161
     },
     "val": {
-      "proteins": 811,
-      "residues": 1632603
+      "proteins": 1051,
+      "residues": 1403838,
+      "contacts": 9626,
+      "rate": 0.006857
     },
     "test": {
-      "proteins": 541,
-      "residues": 867430
+      "proteins": 1075,
+      "residues": 1743791,
+      "contacts": 13837,
+      "rate": 0.007935
     }
+  },
+  "aa_enrichment": {
+    "TRP": 1.88,
+    "ARG": 1.44,
+    "GLY": 1.36,
+    "LYS": 1.33,
+    "PHE": 1.23,
+    "CYS": 1.15,
+    "SER": 1.13,
+    "HIS": 1.11,
+    "LEU": 1.08,
+    "TYR": 1.08,
+    "MET": 1.04,
+    "GLU": 0.97,
+    "ALA": 0.94,
+    "GLN": 0.89,
+    "THR": 0.87,
+    "VAL": 0.73,
+    "ASN": 0.71,
+    "MSE": 0.61,
+    "ASP": 0.59,
+    "ILE": 0.57,
+    "PRO": 0.51,
+    "SEC": 0.0
   }
 }

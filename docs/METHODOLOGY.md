@@ -8,25 +8,16 @@ MPLID provides experimentally-validated residue-level annotations of lipid conta
 
 ## Data Sources
 
-### Primary Sources
+### Primary Source
 
-1. **RCSB Protein Data Bank (PDB)**
-   - Source of atomic coordinates for membrane proteins
-   - Provides crystallized lipid molecule positions (HETATM records)
-   - URL: https://www.rcsb.org/
+**RCSB Protein Data Bank (PDB)**
+- Source of atomic coordinates for all proteins
+- Provides crystallized lipid molecule positions (HETATM records)
+- URL: https://www.rcsb.org/
 
-2. **Orientations of Proteins in Membranes (OPM) Database**
-   - Curated database of membrane protein structures
-   - Provides validated membrane protein identification
-   - URL: https://opm.phar.umich.edu/
+### Data Collection
 
-### Data Integration
-
-The dataset is created by identifying the intersection of:
-- Membrane proteins validated in OPM
-- PDB structures containing crystallized lipid molecules
-
-This ensures that only genuine membrane proteins with experimental lipid contact evidence are included.
+MPLID uses a single data source: the RCSB PDB. We query RCSB for all structures containing recognized lipid chemical components (117 codes), download the original PDB files preserving HETATM records, and compute contacts directly from atomic coordinates. No OPM database, no membrane plane calculations, no external computational dependencies.
 
 ## Contact Definition
 
@@ -58,15 +49,20 @@ The 4.0 Å cutoff was chosen based on:
 
 ### Supported Lipid Types
 
-MPLID recognizes over 150 lipid codes from the PDB Chemical Component Dictionary. Major categories include:
+MPLID recognizes 117 lipid codes from the PDB Chemical Component Dictionary and CHARMM simulation nomenclature. Major categories include:
 
-| Category | Examples | Description |
-|----------|----------|-------------|
-| Phospholipids | CDL, POV, PCW, PEE, PGV | Membrane bilayer components |
-| Sphingolipids | SPH, S1P | Sphingosine-based lipids |
-| Sterols | CLR, CHD, Y01, BCL | Cholesterol and derivatives |
-| Fatty acids | MYR, OLA, STE, ARA | Free fatty acid chains |
-| Detergents | LDA, LMT, BOG, OLC | Membrane-mimetic molecules |
+| Category | Count | Examples | Description |
+|----------|-------|----------|-------------|
+| Phospholipids | 24 | PC1, PCW, POV, PEE, PGV | Membrane bilayer components |
+| Cardiolipin | 4 | CDL, C9V, 18W, LCL | Mitochondrial lipids |
+| Sphingolipids | 7 | SPH, S1P, HXJ, CRT | Sphingosine-based lipids |
+| Sterols | 9 | CLR, CHD, Y01, ERG | Cholesterol and derivatives |
+| Fatty acids | 14 | PLM, MYR, OLA, STE, ARA | Free fatty acid chains |
+| Glycerolipids | 6 | TGL, DAG, MAG, GMO | Glycerol-based lipids |
+| Detergents | 22 | LDA, LMT, BOG, OLC, DPC | Membrane-mimetic molecules |
+| Lipid A | 3 | LPA, KDO, 6LP | LPS components |
+| CHARMM simulation | 27 | POPC, POPE, POPG | Cryo-EM deposition names |
+| Generic | 1 | LIP | Unspecified lipid |
 
 ### Detergent Handling
 
@@ -141,15 +137,15 @@ All splits use a fixed random seed (42) for reproducibility. The exact split ass
 | Label source | Crystallized lipids | Computed membrane plane |
 | Precision | Residue-level (4.0 Å) | Zone-based (±15 Å) |
 | Validation | Experimental | Computational |
-| Coverage | 2,792 proteins | 15,096 proteins |
+| Coverage | 4,704 proteins | 15,096 proteins |
 
 ### vs. DREAMM Dataset
 
 | Aspect | MPLID | DREAMM |
 |--------|-------|--------|
-| Proteins | 2,792 | 54 |
-| Label source | Crystallized lipids | Crystallized lipids |
-| Availability | Public | Limited |
+| Proteins | 4,704 | 54 |
+| Label source | Crystallized lipids | Literature curation (EPR, fluorescence, mutagenesis) |
+| Availability | Public (Zenodo + GitHub) | Distributed within prediction tool |
 
 ## References
 

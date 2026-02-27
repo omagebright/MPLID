@@ -14,9 +14,10 @@ Files: `train_residues.csv`, `val_residues.csv`, `test_residues.csv`
 | `chain_id` | string | Protein chain identifier | `A` |
 | `residue_number` | integer | Residue position in the chain | `142` |
 | `residue_name` | string | Three-letter amino acid code | `LEU` |
-| `is_contact` | integer | Binary contact label (1=contact, 0=non-contact) | `1` |
-| `lipid_type` | string | Lipid code if contact, null otherwise | `CLR` |
-| `min_distance` | float | Minimum distance to nearest lipid (Å), null if no lipid | `3.45` |
+| `is_contact` | boolean | True if any heavy atom within 4.0 A of lipid heavy atom | `True` |
+| `label_source` | string | Always "EXPERIMENTAL" (from crystallized lipids) | `EXPERIMENTAL` |
+| `confidence` | string | Label confidence level | `high` |
+| `min_distance` | float | Minimum heavy-atom-to-lipid distance (A) | `3.45` |
 | `cluster_id` | integer | Sequence cluster assignment | `127` |
 | `split` | string | Dataset split assignment | `train` |
 
@@ -26,9 +27,10 @@ Files: `train_residues.csv`, `val_residues.csv`, `test_residues.csv`
 - `chain_id`: Single character (A-Z, 0-9)
 - `residue_number`: Positive integer
 - `residue_name`: Standard three-letter amino acid codes (see below)
-- `is_contact`: Binary (0 or 1)
-- `lipid_type`: Valid PDB lipid code or null
-- `min_distance`: Positive float or null
+- `is_contact`: Boolean (True or False)
+- `label_source`: Always "EXPERIMENTAL"
+- `confidence`: Label confidence level
+- `min_distance`: Positive float
 - `cluster_id`: Positive integer
 - `split`: One of `train`, `val`, `test`
 
@@ -87,70 +89,157 @@ File: `data/statistics/lipid_distribution.csv`
 | `count` | integer | Number of contact residues |
 | `n_proteins` | integer | Number of proteins with this lipid |
 
-## Recognized Lipid Codes
+## Recognized Lipid Codes (117 total)
 
-### Phospholipids
+### Phospholipids (24 codes)
+
+| Code | Name |
+|------|------|
+| PC1 | 1,2-diacyl-sn-glycero-3-phosphocholine |
+| PCW | 1,2-dioleoyl-sn-glycero-3-phosphocholine (DOPC) |
+| POV | Palmitoyl-oleoyl-phosphatidylcholine (POPC) |
+| PLC | Diundecyl phosphatidylcholine |
+| 1PL | 1-palmitoyl-sn-glycero-3-phosphocholine |
+| 2PL | 1,2-dipalmitoyl-sn-glycero-3-phosphocholine |
+| XPC | Phosphatidylcholine variant |
+| PEE | 1,2-dioleoyl-sn-glycero-3-phosphoethanolamine (DOPE) |
+| PTY | Phosphatidylethanolamine |
+| MPE | Myristic-palmitoyl PE |
+| DPE | Dipalmitoyl PE |
+| PGV | Phosphatidylglycerol |
+| EPG | Egg PG |
+| LHG | 1,2-dipalmitoyl-phosphatidylglycerol |
+| PGR | PG variant |
+| DPG | Diphosphatidylglycerol |
+| LPS | Lysophosphatidylserine |
+| DPS | Dipalmitoyl PS |
+| PTI | Phosphatidylinositol |
+| IPC | Inositol phosphoceramide |
+| PIP | PI phosphate |
+| PI3 | PI 3-phosphate |
+| PI4 | PI 4-phosphate |
+| P34 | PI 3,4-bisphosphate |
+
+### Cardiolipin (4 codes)
 
 | Code | Name |
 |------|------|
 | CDL | Cardiolipin |
-| POV | 1-palmitoyl-2-oleoyl-phosphatidylcholine |
-| PCW | Phosphatidylcholine |
-| PEE | Phosphatidylethanolamine |
-| PGV | Phosphatidylglycerol |
-| PLM | Palmitic acid |
-| PLC | Dipalmitoyl phosphatidylcholine |
-| POP | 1-palmitoyl-2-oleoyl-phosphatidylethanolamine |
-| PPE | Palmitoyl-2-oleoyl-sn-glycero-3-phosphoethanolamine |
-| PGP | Phosphatidylglycerol phosphate |
-| PIO | Phosphatidylinositol |
-| PIP | Phosphatidylinositol-4-phosphate |
-| EPE | 1,2-dioleoyl-sn-glycero-3-phosphoethanolamine |
-| LPE | Lysophosphatidylethanolamine |
+| C9V | Cardiolipin-boron complex |
+| 18W | Tetraoleoyl cardiolipin |
+| LCL | Lyso-cardiolipin |
 
-### Sphingolipids
+### Sphingolipids (7 codes)
 
 | Code | Name |
 |------|------|
+| HXJ | Sphingomyelin/ceramide variant |
 | SPH | Sphingosine |
 | S1P | Sphingosine-1-phosphate |
-| HXJ | Hexosylceramide |
+| CRT | Ceramide |
+| GCR | Glucosylceramide |
+| GSP | Ganglioside |
+| GLF | Galactosylceramide |
 
-### Sterols
+### Sterols (9 codes)
 
 | Code | Name |
 |------|------|
 | CLR | Cholesterol |
-| CHD | Cholesteryl hemisuccinate |
+| CHD | Cholesterol derivative |
 | Y01 | Cholesterol hemisuccinate |
-| BCL | Beta-sitosterol |
-| CHL | Chlorophyll |
-| LHG | Ergosterol |
+| OHC | 25-hydroxycholesterol |
+| OCL | Cholesteryl oleate |
+| LNS | Lanosterol |
+| ERG | Ergosterol |
+| SIT | Beta-sitosterol |
+| STI | Stigmasterol |
 
-### Fatty Acids
-
-| Code | Name |
-|------|------|
-| MYR | Myristic acid |
-| OLA | Oleic acid |
-| STE | Stearic acid |
-| ARA | Arachidonic acid |
-| DHA | Docosahexaenoic acid |
-| MYS | Myristoyl |
-| PAM | Palmitate |
-| LNL | Linoleic acid |
-
-### Detergents and Membrane Mimetics
+### Fatty Acids (14 codes)
 
 | Code | Name |
 |------|------|
-| LDA | Lauryl dimethylamine-N-oxide |
-| LMT | n-Dodecyl-beta-D-maltoside |
-| BOG | Beta-octyl glucoside |
-| OLC | n-Octyl-beta-D-glucopyranoside |
-| DPC | n-Dodecylphosphocholine |
-| DMU | n-Decyl-beta-D-maltoside |
-| UNL | Unknown ligand (lipid-like) |
+| PLM | Palmitic acid (C16:0) |
+| MYR | Myristic acid (C14:0) |
+| OLA | Oleic acid (C18:1) |
+| STE | Stearic acid (C18:0) |
+| ARA | Arachidonic acid (C20:4) |
+| DHA | Docosahexaenoic acid (C22:6) |
+| LNL | Linoleic acid (C18:2) |
+| LNN | Alpha-linolenic acid (C18:3) |
+| EPA | Eicosapentaenoic acid (C20:5) |
+| PAM | Palmitate ion |
+| DCR | Decanoic acid |
+| UND | Undecanoic acid |
+| LAU | Lauric acid (C12:0) |
+| CAP | Capric acid (C10:0) |
+
+### Glycerolipids (6 codes)
+
+| Code | Name |
+|------|------|
+| TGL | Triglyceride |
+| TAG | Triacylglycerol |
+| DGA | Diglyceride |
+| DAG | Diacylglycerol |
+| MAG | Monoacylglycerol |
+| GMO | Glyceryl monooleate |
+
+### Detergents and Membrane Mimetics (22 codes)
+
+| Code | Name |
+|------|------|
+| LDA | Lauryl dimethylamine-N-oxide (LDAO) |
+| LMT | Dodecyl-beta-D-maltoside (DDM) |
+| OLC | Monoolein (glyceryl monooleate) |
+| BOG | n-Octyl-beta-D-glucopyranoside |
+| BGC | Beta-D-glucopyranosyl |
+| C8E | Octyl-PEG |
+| C10 | Decyl maltoside |
+| C12 | Dodecyl maltoside |
+| UDM | n-Undecyl-beta-D-maltoside |
+| NM | n-Nonyl-beta-D-maltoside |
+| DM | n-Decyl-beta-D-maltoside |
+| HTG | Heptyl thioglucoside |
+| OG | Octyl glucoside |
+| NG | Nonyl glucoside |
+| SDS | Sodium dodecyl sulfate |
+| DPC | Dodecylphosphocholine |
+| FC6 | Fos-choline 6 |
+| FC8 | Fos-choline 8 |
+| FC10 | Fos-choline 10 |
+| FC12 | Fos-choline 12 |
+| FC14 | Fos-choline 14 |
+| FC16 | Fos-choline 16 |
+
+### Lipid A Components (3 codes)
+
+| Code | Name |
+|------|------|
+| LPA | Lipid A |
+| KDO | 3-deoxy-D-manno-octulosonic acid |
+| 6LP | Lipid A disaccharide |
+
+### CHARMM Simulation Nomenclature (27 codes)
+
+These codes are commonly found in cryo-EM depositions where lipid bilayers are modeled using molecular dynamics force field naming conventions.
+
+| Code | Name |
+|------|------|
+| POPC, POPE, POPS, POPG, POPA | Palmitoyl-oleoyl variants |
+| DPPC, DPPE, DPPS, DPPG | Dipalmitoyl variants |
+| DOPC, DOPE, DOPS, DOPG | Dioleoyl variants |
+| DMPC, DMPE, DMPG | Dimyristoyl variants |
+| DLPC, DLPE, DLPG | Dilauroyl variants |
+| SOPC, SDPC, SLPC | Stearoyl-containing variants |
+| PLPC, PAPC, SAPC | Mixed-chain variants |
+| CHL1, CHOL | Cholesterol (CHARMM names) |
+
+### Generic (1 code)
+
+| Code | Name |
+|------|------|
+| LIP | Generic lipid |
 
 ## Dataset Summary Statistics
 
@@ -160,30 +249,27 @@ File: `data/statistics/dataset_summary.json`
 
 ```json
 {
-  "total_proteins": 2792,
-  "total_residues": 4717703,
-  "total_contacts": 39224,
-  "total_clusters": 594,
-  "contact_rate": 0.0083,
+  "total_proteins": 4704,
+  "total_residues": 8055325,
+  "total_contacts": 80439,
+  "total_clusters": 813,
+  "contact_rate": 0.0100,
   "random_seed": 42,
   "splits": {
     "train": {
-      "proteins": 1840,
-      "residues": 2634209,
-      "contacts": 25891,
-      "clusters": 392
+      "proteins": 2578,
+      "residues": 4907696,
+      "contacts": 56976
     },
     "val": {
-      "proteins": 811,
-      "residues": 1632603,
-      "contacts": 10112,
-      "clusters": 121
+      "proteins": 1051,
+      "residues": 1403838,
+      "contacts": 9626
     },
     "test": {
-      "proteins": 541,
-      "residues": 867430,
-      "contacts": 5221,
-      "clusters": 81
+      "proteins": 1075,
+      "residues": 1743791,
+      "contacts": 13837
     }
   }
 }

@@ -1,48 +1,64 @@
 {
-  "pipeline_version": "RCSB-only (no OPM dependency)",
-  "label_source": "CRYSTALLOGRAPHIC",
+  "pipeline_version": "MPLID v2.1.0 (corrected lipid codes)",
+  "label_source": "EXPERIMENTAL",
   "distance_cutoff_angstrom": 4.0,
-  "residue_representation": "C-alpha atom",
-  "timestamp": "2026-02-06T02:00:59.394422",
-  "total_rcsb_lipid_structures": 8221,
-  "proteins_processed": 8221,
-  "proteins_with_contacts": 6270,
-  "proteins_failed": 675,
-  "total_residues": 10486965,
-  "positive_residues": 98101,
-  "positive_rate": 0.00935456540572034,
-  "n_clusters": 1848,
+  "residue_representation": "All heavy atoms (minimum distance)",
+  "timestamp": "2026-02-27T07:31:31.814024",
+  "excluded_codes": [
+    "UNL",
+    "BCL",
+    "UNK",
+    "EPE"
+  ],
+  "total_recognized_lipid_codes": 117,
+  "proteins_processed": 4712,
+  "proteins_with_contacts": 4712,
+  "proteins_dropped_zero_contacts": 1011,
+  "total_residues": 8055325,
+  "positive_residues": 80439,
+  "positive_rate": 0.009985816835447359,
+  "n_clusters": 813,
   "sequence_identity_threshold": 0.3,
   "train": {
-    "proteins": 4644,
-    "residues": 7521766,
-    "positives": 73432,
-    "positive_rate": 0.009762600963656673
+    "proteins": 2578,
+    "residues": 4907696,
+    "contacts": 56976,
+    "rate": 0.01161
   },
   "val": {
-    "proteins": 1436,
-    "residues": 1507429,
-    "positives": 10879,
-    "positive_rate": 0.007216923649472048
+    "proteins": 1051,
+    "residues": 1403838,
+    "contacts": 9626,
+    "rate": 0.006857
   },
   "test": {
-    "proteins": 1413,
-    "residues": 1391166,
-    "positives": 12980,
-    "positive_rate": 0.009330302781982883
+    "proteins": 1075,
+    "residues": 1743791,
+    "contacts": 13837,
+    "rate": 0.007935
   },
-  "lipid_types_found": {
-    "UNKNOWN": 6270
-  },
-  "total_lipid_codes_queried": 121,
-  "comparison_to_dreamm": {
-    "dreamm_proteins": 54,
-    "dreamm_residues": 12805,
-    "dreamm_label_source": "Literature curation (EPR, fluorescence, mutagenesis)",
-    "mplid_proteins": 6270,
-    "mplid_residues": 10486965,
-    "mplid_label_source": "Crystallographic (4.0\u00c5 C\u03b1-to-lipid)",
-    "scale_increase_proteins": "116.1x",
-    "scale_increase_residues": "819.0x"
+  "aa_enrichment": {
+    "TRP": 1.88,
+    "ARG": 1.44,
+    "GLY": 1.36,
+    "LYS": 1.33,
+    "PHE": 1.23,
+    "CYS": 1.15,
+    "SER": 1.13,
+    "HIS": 1.11,
+    "LEU": 1.08,
+    "TYR": 1.08,
+    "MET": 1.04,
+    "GLU": 0.97,
+    "ALA": 0.94,
+    "GLN": 0.89,
+    "THR": 0.87,
+    "VAL": 0.73,
+    "ASN": 0.71,
+    "MSE": 0.61,
+    "ASP": 0.59,
+    "ILE": 0.57,
+    "PRO": 0.51,
+    "SEC": 0.0
   }
 }

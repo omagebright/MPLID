@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
-"""Run MPLID pipeline using ONLY RCSB crystallographic lipid contacts.
+"""Run MPLID pipeline using ONLY RCSB experimental lipid contacts.
 
 This script uses 100% experimental data with zero dependency on OPM:
 1. Query RCSB to find ALL PDB structures with lipid ligands (~8,221 structures)
 2. Download original PDB files directly from RCSB
-3. Extract experimental lipid contacts using 4.0Å Cα-to-lipid cutoff
+3. Extract experimental lipid contacts using 4.0 A all-atom distance cutoff
 4. Cluster by sequence identity and create train/val/test splits
+
+Contact definition: minimum distance between any heavy atom (non-hydrogen)
+of a protein residue and any heavy atom of a lipid molecule. A residue is
+labeled as a contact if this minimum distance is <= 4.0 Angstroms.
 
 Key difference from run_experimental_only_pipeline.py:
 - NO OPM intersection filtering (captures 100% of RCSB lipid structures)
 - NO OPM file downloads needed
-- Purely crystallographic ground truth
+- Purely experimental ground truth
 
 Dataset framing:
-- "First large-scale predictor trained on crystallographically-observed lipid
+- "First large-scale predictor trained on experimentally-observed lipid
   contacts rather than literature-curated functional data (DREAMM's 54 proteins)"
 - Objective, reproducible labels from PDB HETATM records
 - Scale: ~7,000+ proteins vs DREAMM's 54
@@ -36,14 +40,28 @@ from dataclasses import dataclass, field
 import requests
 import pandas as pd
 import numpy as np
+from Bio.PDB import PDBParser
+from scipy.spatial.distance import cdist
 from tqdm import tqdm
 
-# Add src to path
+# Add project paths
+sys.path.insert(0, str(Path(__file__).parent))
 sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
+from utils.lipid_codes import LIPID_CODES, LIPID_QUERY_CODES, is_lipid
 from src.data.config import DataConfig
-from src.data.lipid_contacts import LipidContactExtractor, LIPID_RESIDUE_NAMES
 from src.data.sequence_clustering import SequenceClusterer, stratified_cluster_split
+
+# Standard amino acids
+STANDARD_AA = {
+    "ALA", "ARG", "ASN", "ASP", "CYS", "GLN", "GLU", "GLY", "HIS", "ILE",
+    "LEU", "LYS", "MET", "PHE", "PRO", "SER", "THR", "TRP", "TYR", "VAL",
+    "MSE", "SEC", "PYL",
+}
+
+# Default contact distance cutoff
+CONTACT_CUTOFF = 4.0
 
 # Setup logging
 logging.basicConfig(
@@ -70,11 +88,10 @@ def query_rcsb_for_lipid_structures() -> Dict[str, List[str]]:
         Dict mapping PDB IDs (uppercase) to list of lipid codes found
     """
     logger.info("Querying RCSB for structures with lipid ligands...")
-    logger.info(f"Searching for {len(LIPID_RESIDUE_NAMES)} lipid codes from our curated list")
+    logger.info(f"Searching for {len(LIPID_QUERY_CODES)} lipid codes from our curated list")
 
-    # Use all lipid codes from our comprehensive list
-    # Filter to 3-letter codes (RCSB uses 3-letter component IDs)
-    lipid_codes = [code for code in LIPID_RESIDUE_NAMES if len(code) <= 3]
+    # Use lipid query codes (3-letter PDB component IDs)
+    lipid_codes = LIPID_QUERY_CODES
 
     # Add common 4-letter codes that we should query individually
     # (4-letter codes like POPC, DPPC are CHARMM names, less common in PDB)
@@ -228,57 +245,155 @@ def extract_sequence(pdb_path: Path) -> Optional[str]:
         return None
 
 
+def get_heavy_atoms(residue) -> np.ndarray:
+    """Extract coordinates of heavy (non-hydrogen) atoms from a residue.
+
+    Parameters
+    ----------
+    residue : Bio.PDB.Residue.Residue
+        BioPython residue object.
+
+    Returns
+    -------
+    np.ndarray
+        Array of shape (N, 3) with heavy atom coordinates.
+    """
+    coords = []
+    for atom in residue.get_atoms():
+        if atom.element != "H":
+            coords.append(atom.get_coord())
+    return np.array(coords) if coords else np.empty((0, 3))
+
+
+def calculate_allatom_contacts(
+    pdb_path: Path,
+    cutoff: float = CONTACT_CUTOFF,
+) -> List[Dict]:
+    """Calculate all-atom lipid contacts for all residues in a structure.
+
+    For each protein residue, computes the minimum distance between any
+    heavy atom of that residue and any heavy atom of any lipid molecule.
+    A residue is labeled as a contact if this minimum distance <= cutoff.
+
+    Parameters
+    ----------
+    pdb_path : Path
+        Path to PDB structure file.
+    cutoff : float, optional
+        Contact distance cutoff in Angstroms (default: 4.0).
+
+    Returns
+    -------
+    List[Dict]
+        List of residue records with contact information.
+    """
+    parser = PDBParser(QUIET=True)
+    pdb_id = pdb_path.stem.upper()
+
+    try:
+        structure = parser.get_structure(pdb_id, str(pdb_path))
+    except Exception as e:
+        logging.warning(f"Failed to parse {pdb_id}: {e}")
+        return []
+
+    # Step 1: Extract all lipid heavy atom coordinates
+    lipid_atoms = []
+    for model in structure:
+        for chain in model:
+            for residue in chain:
+                resname = residue.get_resname().strip()
+                if is_lipid(resname):
+                    coords = get_heavy_atoms(residue)
+                    if len(coords) > 0:
+                        lipid_atoms.append(coords)
+
+    if not lipid_atoms:
+        return []
+
+    all_lipid_coords = np.vstack(lipid_atoms)
+
+    # Step 2: Process each protein residue (all heavy atoms)
+    records = []
+    for model in structure:
+        for chain in model:
+            for residue in chain:
+                hetflag = residue.get_id()[0]
+                if hetflag != " ":
+                    continue
+
+                resname = residue.get_resname().strip()
+                if resname not in STANDARD_AA:
+                    continue
+
+                resnum = residue.get_id()[1]
+                protein_coords = get_heavy_atoms(residue)
+                if len(protein_coords) == 0:
+                    continue
+
+                # Minimum distance from any protein atom to any lipid atom
+                dists = cdist(protein_coords, all_lipid_coords)
+                min_dist = float(np.min(dists))
+
+                records.append({
+                    "pdb_id": pdb_id,
+                    "chain_id": chain.get_id(),
+                    "residue_number": resnum,
+                    "residue_name": resname,
+                    "is_contact": min_dist <= cutoff,
+                    "label_source": "EXPERIMENTAL",
+                    "confidence": "high",
+                    "min_distance": round(min_dist, 3),
+                })
+
+    return records
+
+
 def process_protein(
     pdb_id: str,
     pdb_dir: Path,
     session: requests.Session,
-    lipid_extractor: LipidContactExtractor
+    cutoff: float = CONTACT_CUTOFF,
 ) -> Tuple[List[Dict], Optional[str], Optional[str]]:
-    """Process a single protein for experimental lipid contacts.
+    """Process a single protein for experimental all-atom lipid contacts.
 
-    Args:
-        pdb_id: PDB identifier
-        pdb_dir: Directory for PDB files
-        session: Requests session with proxy
-        lipid_extractor: LipidContactExtractor instance
+    Downloads the PDB structure (if not cached), then calculates the
+    minimum all-atom distance between each protein residue and any
+    crystallized lipid molecule. A residue is labeled as a contact
+    if any of its heavy atoms is within the cutoff distance of any
+    lipid heavy atom.
 
-    Returns:
-        Tuple of (residue dicts, sequence string, error message if any)
+    Parameters
+    ----------
+    pdb_id : str
+        PDB identifier.
+    pdb_dir : Path
+        Directory for downloaded PDB files.
+    session : requests.Session
+        Requests session with proxy configuration.
+    cutoff : float, optional
+        Contact distance cutoff in Angstroms (default: 4.0).
+
+    Returns
+    -------
+    Tuple[List[Dict], Optional[str], Optional[str]]
+        (residue records, sequence string, error message if any)
     """
     residues = []
     sequence = None
     error = None
 
     try:
-        # Download PDB structure
+        # Download PDB structure (cached)
         pdb_path = download_pdb_structure(pdb_id, pdb_dir, session)
 
         if not pdb_path or not pdb_path.exists():
             return [], None, f"Failed to download PDB {pdb_id}"
 
-        # Extract contacts using EXPERIMENTAL lipid detection only
-        # use_ca_only=True: Use Cα atom for residue representation
-        # use_opm_membrane_plane=False: Never fall back to OPM Z-coordinates
-        contacts = lipid_extractor.extract_contacts_from_pdb(
-            pdb_path,
-            use_ca_only=True,
-            use_opm_membrane_plane=False
-        )
+        # Extract all-atom contacts
+        residues = calculate_allatom_contacts(pdb_path, cutoff)
 
-        if not contacts:
+        if not residues:
             return [], None, f"No residues extracted from {pdb_id}"
-
-        for contact in contacts:
-            residues.append({
-                "pdb_id": pdb_id,
-                "chain_id": contact.chain_id,
-                "residue_number": contact.residue_number,
-                "residue_name": contact.residue_name,
-                "is_contact": contact.is_contact,
-                "label_source": "CRYSTALLOGRAPHIC",
-                "confidence": "high",
-                "min_distance": contact.min_distance
-            })
 
         # Extract sequence from PDB
         sequence = extract_sequence(pdb_path)
@@ -291,7 +406,7 @@ def process_protein(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Run MPLID pipeline using ONLY RCSB crystallographic lipid contacts (no OPM dependency)"
+        description="Run MPLID pipeline using ONLY RCSB experimental lipid contacts (no OPM dependency)"
     )
     parser.add_argument(
         "--max-proteins", type=int, default=None,
@@ -321,7 +436,7 @@ def main():
     logging.getLogger().addHandler(file_handler)
 
     logger.info("=" * 70)
-    logger.info("MPLID RCSB-Only Pipeline (100% Crystallographic Labels)")
+    logger.info("MPLID RCSB-Only Pipeline (100% Experimental Labels)")
     logger.info("=" * 70)
     logger.info("NO OPM dependency - using all RCSB structures with lipid ligands")
     logger.info("")
@@ -398,8 +513,6 @@ def main():
     session = requests.Session()
     session.proxies = PROXY
 
-    lipid_extractor = LipidContactExtractor(config.distance_cutoff)
-
     all_residues = existing_residues.copy()
     sequences = {}
 
@@ -408,10 +521,11 @@ def main():
 
     proteins_remaining = [p for p in proteins_to_process if p not in already_processed]
     logger.info(f"Processing {len(proteins_remaining)} proteins...")
+    logger.info(f"Contact definition: all-atom heavy atoms, cutoff={config.distance_cutoff} A")
 
     for pdb_id in tqdm(proteins_remaining, desc="Processing proteins"):
         residues, sequence, error = process_protein(
-            pdb_id, pdb_dir, session, lipid_extractor
+            pdb_id, pdb_dir, session, cutoff=config.distance_cutoff
         )
 
         if error:
@@ -544,9 +658,9 @@ def main():
     # Save comprehensive statistics
     stats_dict = {
         "pipeline_version": "RCSB-only (no OPM dependency)",
-        "label_source": "CRYSTALLOGRAPHIC",
+        "label_source": "EXPERIMENTAL",
         "distance_cutoff_angstrom": config.distance_cutoff,
-        "residue_representation": "C-alpha atom",
+        "residue_representation": "All heavy atoms (minimum distance)",
         "timestamp": datetime.now().isoformat(),
 
         "total_rcsb_lipid_structures": stats.total_rcsb_lipid_structures,
@@ -581,7 +695,8 @@ def main():
         },
 
         "lipid_types_found": stats.lipid_types_found,
-        "total_lipid_codes_queried": len(LIPID_RESIDUE_NAMES),
+        "total_lipid_codes_queried": len(LIPID_QUERY_CODES),
+        "total_lipid_codes_recognized": len(LIPID_CODES),
 
         "comparison_to_dreamm": {
             "dreamm_proteins": 54,
@@ -589,7 +704,7 @@ def main():
             "dreamm_label_source": "Literature curation (EPR, fluorescence, mutagenesis)",
             "mplid_proteins": stats.proteins_with_contacts,
             "mplid_residues": stats.total_residues,
-            "mplid_label_source": "Crystallographic (4.0Å Cα-to-lipid)",
+            "mplid_label_source": "Experimental (4.0A all-atom)",
             "scale_increase_proteins": f"{stats.proteins_with_contacts / 54:.1f}x",
             "scale_increase_residues": f"{stats.total_residues / 12805:.1f}x"
         }

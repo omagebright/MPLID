@@ -22,9 +22,9 @@ repository-code: "https://github.com/omagebright/MPLID"
 url: "https://github.com/omagebright/MPLID"
 abstract: >-
   A large-scale dataset of experimentally validated lipid contact
-  residues derived from crystallographic structures in the Protein
-  Data Bank. Contains 10.5 million residues from 7,541 proteins
-  with crystallized lipid molecules, using 100% crystallographic
+  residues derived from experimentally determined structures in the
+  Protein Data Bank. Contains 10.5 million residues from 7,541 proteins
+  with experimentally resolved lipid molecules, using 100% experimental
   labels with no computational database dependencies.
 keywords:
   - membrane proteins
@@ -33,7 +33,7 @@ keywords:
   - machine learning
   - benchmark dataset
   - structural biology
-  - crystallography
+  - experimental structures
 license: MIT
 version: "2.0.0"
 date-released: "2026-02-06"

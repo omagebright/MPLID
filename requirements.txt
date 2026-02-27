@@ -1,26 +1,35 @@
 # MPLID: Membrane Protein-Lipid Interface Dataset
-# Python dependencies for data processing and analysis
+# Python dependencies with pinned versions (tested on virt0258, Feb 2026)
 
 # Core data processing
-pandas>=1.3.0
-numpy>=1.20.0
+pandas==2.3.3
+numpy==2.3.4
 
 # Structural biology
-biopython>=1.79
+biopython>=1.79  # For PDB parsing
 
-# Machine learning (for baseline models)
-scikit-learn>=1.0.0
+# Machine learning (baseline models)
+scikit-learn==1.7.2
+imbalanced-learn==0.14.0
 
 # Visualization
-matplotlib>=3.4.0
-seaborn>=0.11.0
+matplotlib==3.10.7
+seaborn==0.13.2
 
-# HTTP requests (for RCSB/OPM queries)
-requests>=2.25.0
+# HTTP requests (RCSB queries)
+requests==2.31.0
 
 # Progress bars
-tqdm>=4.60.0
+tqdm==4.67.1
 
-# Jupyter notebooks
+# Utilities
+scipy==1.16.3
+
+# Optional: Jupyter notebooks
 jupyter>=1.0.0
 ipykernel>=6.0.0
+
+# Optional: Deep learning (ESM-2 embeddings)
+# torch>=2.0.0
+# transformers>=4.30.0
+# fair-esm>=2.0.0

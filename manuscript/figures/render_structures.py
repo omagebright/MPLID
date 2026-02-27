@@ -34,7 +34,7 @@ OUTPUT_DIR = '/HOMENFS/60238528073/Art/Exo_Database/Lipid_membrane_protein_inter
 LIPID_NAMES = {
     'OLA', 'OLB', 'OLC', 'CLR', 'CDL', 'HXJ', 'PLM', 'PEE', 'PGV',
     'PCW', 'POV', 'LDA', 'LMT', 'BOG', 'DPC', 'SPH', 'MYR', 'STE',
-    'ARA', 'DHA', 'Y01', 'BCL', 'CHD', 'EPE', 'DMU', 'UNL', 'S1P'
+    'ARA', 'DHA', 'Y01', 'CHD', 'DMU', 'S1P', 'LHG'
 }
 
 # Water and buffer molecules to hide

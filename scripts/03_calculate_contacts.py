@@ -27,16 +27,16 @@ CONTACT_CUTOFF = 4.0
 # Recognized lipid residue codes
 LIPID_CODES = {
     # Phospholipids
-    "CDL", "POV", "PCW", "PEE", "PGV", "PLM", "PLC", "POP", "PPE", "PGP",
-    "PIO", "PIP", "P2E", "P3E", "P4E", "P5E", "PC1", "PE5", "LPE", "EPE",
+    "CDL", "POV", "PCW", "PEE", "PGV", "PLC", "POP", "PPE", "PGP",
+    "PIO", "PIP", "P2E", "P3E", "P4E", "P5E", "PC1", "PE5", "LPE", "LHG",
     # Sphingolipids
     "SPH", "S1P", "HXJ",
     # Sterols
-    "CLR", "CHD", "Y01", "BCL", "CHL", "LHG",
+    "CLR", "CHD", "Y01",
     # Fatty acids
-    "MYR", "OLA", "STE", "ARA", "DHA", "MYS", "PAM", "LNL",
+    "MYR", "OLA", "STE", "ARA", "DHA", "PLM", "MYS", "PAM", "LNL",
     # Detergents
-    "LDA", "LMT", "BOG", "OLC", "DPC", "DMU", "UNL",
+    "LDA", "LMT", "BOG", "OLC", "DPC", "DMU",
 }
 
 

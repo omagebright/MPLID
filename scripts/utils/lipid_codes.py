@@ -1,7 +1,9 @@
 """Lipid code definitions for MPLID dataset.
 
-This module contains the complete list of recognized lipid codes
-from the PDB Chemical Component Dictionary.
+This module contains the complete list of 117 recognized lipid codes
+used in the MPLID contact calculation pipeline. Codes are sourced from
+the PDB Chemical Component Dictionary and CHARMM lipid simulation
+nomenclature commonly found in cryo-EM depositions.
 
 Author: Folorunsho Bright Omage
 License: MIT
@@ -9,112 +11,158 @@ License: MIT
 
 from typing import Dict, Set
 
-# Primary lipid codes used for RCSB queries
+# Primary lipid codes used for RCSB structure queries.
+# This is a focused subset for efficient RCSB Search API queries;
+# the full recognition set (LIPID_CODES, 117 codes) is used during
+# contact calculation.
 LIPID_QUERY_CODES = [
-    "CDL", "POV", "PCW", "PEE", "PGV", "PLM", "SPH", "S1P",
-    "CLR", "CHD", "Y01", "BCL", "MYR", "OLA", "STE", "ARA",
-    "DHA", "LDA", "LMT", "BOG", "OLC", "DPC", "DMU", "EPE",
-    "LPE", "PLC", "POP", "PPE", "PGP", "UNL", "HXJ",
+    # Phospholipids
+    "CDL", "PC1", "PCW", "PEE", "PGV", "POV", "PLM", "PLC", "LHG", "PTY",
+    # Sterols
+    "CLR", "CHD", "Y01",
+    # Sphingolipids
+    "SPH", "S1P", "HXJ",
+    # Fatty acids
+    "MYR", "OLA", "STE", "ARA", "DHA",
+    # Detergents
+    "LDA", "LMT", "BOG", "OLC", "DPC",
+    # Additional common codes
+    "C9V",
 ]
 
-# Complete lipid code dictionary with categories
+# Complete lipid code dictionary with categories.
+# These 117 codes match the production pipeline exactly.
 LIPID_CATEGORIES: Dict[str, Set[str]] = {
     "phospholipids": {
-        "CDL",  # Cardiolipin
-        "POV",  # 1-palmitoyl-2-oleoyl-phosphatidylcholine
-        "PCW",  # Phosphatidylcholine
-        "PEE",  # Phosphatidylethanolamine
-        "PGV",  # Phosphatidylglycerol
-        "PLM",  # Palmitic acid
-        "PLC",  # Dipalmitoyl phosphatidylcholine
-        "POP",  # 1-palmitoyl-2-oleoyl-phosphatidylethanolamine
-        "PPE",  # Palmitoyl-2-oleoyl-sn-glycero-3-phosphoethanolamine
-        "PGP",  # Phosphatidylglycerol phosphate
-        "PIO",  # Phosphatidylinositol
-        "PIP",  # Phosphatidylinositol-4-phosphate
-        "P2E",  # Phosphatidylinositol-4,5-bisphosphate
-        "P3E",  # Phosphatidylinositol-3,4-bisphosphate
-        "P4E",  # Phosphatidylinositol-3,4,5-trisphosphate
-        "P5E",  # Phosphatidylinositol-5-phosphate
-        "PC1",  # Phosphatidylcholine variant
-        "PE5",  # Phosphatidylethanolamine variant
-        "LPE",  # Lysophosphatidylethanolamine
-        "EPE",  # 1,2-dioleoyl-sn-glycero-3-phosphoethanolamine
-        "LPC",  # Lysophosphatidylcholine
-        "LPG",  # Lysophosphatidylglycerol
-        "PGE",  # Phosphatidylglycerol
-        "PSE",  # Phosphatidylserine
-        "LPS",  # Lysophosphatidylserine
+        # Phosphatidylcholine (PC) variants
+        "PC1",   # 1,2-diacyl-sn-glycero-3-phosphocholine
+        "PCW",   # 1,2-dioleoyl-sn-glycero-3-phosphocholine (DOPC)
+        "POV",   # Palmitoyl-oleoyl-phosphatidylcholine (POPC)
+        "PLC",   # Diundecyl phosphatidylcholine
+        "1PL",   # 1-palmitoyl-sn-glycero-3-phosphocholine
+        "2PL",   # 1,2-dipalmitoyl-sn-glycero-3-phosphocholine
+        "XPC",   # Phosphatidylcholine variant
+        # Phosphatidylethanolamine (PE) variants
+        "PEE",   # 1,2-dioleoyl-sn-glycero-3-phosphoethanolamine (DOPE)
+        "PTY",   # Phosphatidylethanolamine
+        "MPE",   # Myristic-palmitoyl PE
+        "DPE",   # Dipalmitoyl PE
+        # Phosphatidylglycerol (PG) variants
+        "PGV",   # Phosphatidylglycerol
+        "EPG",   # Egg PG
+        "LHG",   # 1,2-dipalmitoyl-phosphatidylglycerol
+        "PGR",   # PG variant
+        "DPG",   # Diphosphatidylglycerol
+        # Phosphatidylserine (PS) variants
+        "LPS",   # Lysophosphatidylserine
+        "DPS",   # Dipalmitoyl PS
+        # Phosphatidylinositol (PI) variants
+        "PTI",   # Phosphatidylinositol
+        "IPC",   # Inositol phosphoceramide
+        "PIP",   # PI phosphate
+        "PI3",   # PI 3-phosphate
+        "PI4",   # PI 4-phosphate
+        "P34",   # PI 3,4-bisphosphate
+    },
+    "cardiolipin": {
+        "CDL",   # Cardiolipin (canonical PDB code)
+        "C9V",   # Cardiolipin-boron complex
+        "18W",   # Tetraoleoyl cardiolipin
+        "LCL",   # Lyso-cardiolipin
     },
     "sphingolipids": {
-        "SPH",  # Sphingosine
-        "S1P",  # Sphingosine-1-phosphate
-        "HXJ",  # Hexosylceramide
-        "CER",  # Ceramide
-        "SM",   # Sphingomyelin
-        "GLC",  # Glucosylceramide
-        "GAL",  # Galactosylceramide
+        "HXJ",   # Sphingomyelin/ceramide variant
+        "SPH",   # Sphingosine
+        "S1P",   # Sphingosine-1-phosphate
+        "CRT",   # Ceramide
+        "GCR",   # Glucosylceramide
+        "GSP",   # Ganglioside
+        "GLF",   # Galactosylceramide
     },
     "sterols": {
-        "CLR",  # Cholesterol
-        "CHD",  # Cholesteryl hemisuccinate
-        "Y01",  # Cholesterol hemisuccinate
-        "BCL",  # Beta-sitosterol
-        "CHL",  # Chlorophyll
-        "LHG",  # Ergosterol
-        "ERG",  # Ergosterol
-        "STR",  # Stigmasterol
-        "SIT",  # Sitosterol
-        "CPS",  # Campesterol
+        "CLR",   # Cholesterol
+        "CHD",   # Cholesterol derivative
+        "Y01",   # Cholesterol hemisuccinate
+        "OHC",   # 25-hydroxycholesterol
+        "OCL",   # Cholesteryl oleate
+        "LNS",   # Lanosterol
+        "ERG",   # Ergosterol
+        "SIT",   # Beta-sitosterol
+        "STI",   # Stigmasterol
     },
     "fatty_acids": {
-        "MYR",  # Myristic acid (C14:0)
-        "OLA",  # Oleic acid (C18:1)
-        "STE",  # Stearic acid (C18:0)
-        "ARA",  # Arachidonic acid (C20:4)
-        "DHA",  # Docosahexaenoic acid (C22:6)
-        "MYS",  # Myristoyl
-        "PAM",  # Palmitate (C16:0)
-        "LNL",  # Linoleic acid (C18:2)
-        "LNA",  # Alpha-linolenic acid (C18:3)
-        "EPA",  # Eicosapentaenoic acid (C20:5)
-        "LAU",  # Lauric acid (C12:0)
-        "CAP",  # Capric acid (C10:0)
+        "PLM",   # Palmitic acid (C16:0)
+        "MYR",   # Myristic acid (C14:0)
+        "OLA",   # Oleic acid (C18:1)
+        "STE",   # Stearic acid (C18:0)
+        "ARA",   # Arachidonic acid (C20:4)
+        "DHA",   # Docosahexaenoic acid (C22:6)
+        "LNL",   # Linoleic acid (C18:2)
+        "LNN",   # Alpha-linolenic acid (C18:3)
+        "EPA",   # Eicosapentaenoic acid (C20:5)
+        "PAM",   # Palmitate ion
+        "DCR",   # Decanoic acid
+        "UND",   # Undecanoic acid
+        "LAU",   # Lauric acid (C12:0)
+        "CAP",   # Capric acid (C10:0)
+    },
+    "glycerolipids": {
+        "TGL",   # Triglyceride
+        "TAG",   # Triacylglycerol
+        "DGA",   # Diglyceride
+        "DAG",   # Diacylglycerol
+        "MAG",   # Monoacylglycerol
+        "GMO",   # Glyceryl monooleate
     },
     "detergents": {
-        "LDA",  # Lauryl dimethylamine-N-oxide
-        "LMT",  # n-Dodecyl-beta-D-maltoside
-        "BOG",  # Beta-octyl glucoside
-        "OLC",  # n-Octyl-beta-D-glucopyranoside
-        "DPC",  # n-Dodecylphosphocholine
-        "DMU",  # n-Decyl-beta-D-maltoside
-        "UNL",  # Unknown ligand (often lipid-like)
-        "C8E",  # Octyl-polyoxyethylene
-        "C10E", # Decyl-polyoxyethylene
-        "C12E", # Dodecyl-polyoxyethylene
-        "SDS",  # Sodium dodecyl sulfate
-        "TX1",  # Triton X-100
-        "DDM",  # n-Dodecyl-beta-D-maltoside
-        "OG",   # n-Octyl-beta-D-glucoside
-        "NG",   # n-Nonyl-beta-D-glucoside
-        "LDAO", # Lauryldimethylamine oxide
-        "CHAPS",# CHAPS
-        "CHAPSO",# CHAPSO
+        "LDA",   # Lauryl dimethylamine-N-oxide (LDAO)
+        "LMT",   # Dodecyl-beta-D-maltoside (DDM)
+        "OLC",   # Monoolein (glyceryl monooleate)
+        "BOG",   # n-Octyl-beta-D-glucopyranoside
+        "BGC",   # Beta-D-glucopyranosyl
+        "C8E",   # Octyl-PEG
+        "C10",   # Decyl maltoside
+        "C12",   # Dodecyl maltoside
+        "UDM",   # n-Undecyl-beta-D-maltoside
+        "NM",    # n-Nonyl-beta-D-maltoside
+        "DM",    # n-Decyl-beta-D-maltoside
+        "HTG",   # Heptyl thioglucoside
+        "OG",    # Octyl glucoside
+        "NG",    # Nonyl glucoside
+        "SDS",   # Sodium dodecyl sulfate
+        "DPC",   # Dodecylphosphocholine
+        "FC6",   # Fos-choline 6
+        "FC8",   # Fos-choline 8
+        "FC10",  # Fos-choline 10
+        "FC12",  # Fos-choline 12
+        "FC14",  # Fos-choline 14
+        "FC16",  # Fos-choline 16
     },
-    "other": {
-        "TGL",  # Triglyceride
-        "DGD",  # Digalactosyldiacylglycerol
-        "MGD",  # Monogalactosyldiacylglycerol
-        "DAG",  # Diacylglycerol
-        "LPL",  # Lipoprotein lipase
-        "BCD",  # Beta-cyclodextrin (lipid mimetic)
+    "lipid_a": {
+        "LPA",   # Lipid A
+        "KDO",   # 3-deoxy-D-manno-octulosonic acid
+        "6LP",   # Lipid A disaccharide
+    },
+    "charmm_simulation": {
+        # CHARMM/simulation lipid names (commonly found in cryo-EM depositions)
+        "POPC", "POPE", "POPS", "POPG", "POPA",
+        "DPPC", "DPPE", "DPPS", "DPPG",
+        "DOPC", "DOPE", "DOPS", "DOPG",
+        "DMPC", "DMPE", "DMPG",
+        "DLPC", "DLPE", "DLPG",
+        "SOPC", "SDPC", "SLPC",
+        "PLPC", "PAPC", "SAPC",
+        "CHL1", "CHOL",
+    },
+    "generic": {
+        "LIP",   # Generic lipid
     },
 }
 
-# All recognized lipid codes as a flat set
+# All recognized lipid codes as a flat set (117 total)
 LIPID_CODES: Set[str] = set()
-for category_codes in LIPID_CATEGORIES.values():
-    LIPID_CODES.update(category_codes)
+for _category_codes in LIPID_CATEGORIES.values():
+    LIPID_CODES.update(_category_codes)
 
 
 def get_lipid_category(code: str) -> str:
@@ -123,7 +171,7 @@ def get_lipid_category(code: str) -> str:
     Parameters
     ----------
     code : str
-        Three-letter lipid code.
+        Lipid residue code from PDB.
 
     Returns
     -------
@@ -142,7 +190,7 @@ def is_lipid(code: str) -> bool:
     Parameters
     ----------
     code : str
-        Three-letter residue code.
+        Residue code from PDB.
 
     Returns
     -------

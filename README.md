@@ -146,18 +146,20 @@ d_min(R, L) = min_{a ∈ R_heavy, b ∈ L_heavy} ||r_a - r_b|| ≤ 4.0 Å
 
 Where `R_heavy` is the set of all heavy atoms (non-hydrogen) of residue R and `L_heavy` is the set of all heavy atoms of lipid molecule L.
 
-### Supported Lipid Types (117 codes)
+### Supported Lipid Identifiers (117 candidates)
 
 - **Phospholipids** (24): PC1, PCW, POV, PEE, PGV, LHG, PIP, etc.
 - **Cardiolipin** (4): CDL, C9V, 18W, LCL
-- **Sphingolipids** (7): SPH, S1P, HXJ, CRT, GCR, GSP, GLF
+- **Sphingolipids** (7 candidate entries): SPH, S1P, HXJ, GCR, GSP, etc. Some historical candidate codes require RCSB verification before biological interpretation.
 - **Sterols** (9): CLR, CHD, Y01, ERG, SIT, STI, etc.
-- **Fatty acids** (14): PLM, MYR, OLA, STE, ARA, DHA, etc.
+- **Fatty acids** (14 candidate entries): PLM, MYR, OLA, STE, DHA, etc. Some historical candidate codes require RCSB verification before biological interpretation.
 - **Glycerolipids** (6): TGL, DAG, MAG, GMO, etc.
 - **Detergents** (22): LDA, LMT, BOG, OLC, DPC, SDS, etc.
 - **Lipid A** (3): LPA, KDO, 6LP
 - **CHARMM simulation** (27): POPC, POPE, POPG, etc.
 - **Generic** (1): LIP
+
+All PDB-derived candidate ligand codes should be interpreted together with the RCSB Chemical Component Dictionary verification table. During revision, several historical candidate assignments were found to be incorrect or ambiguous, including CRT (spirilloxanthin rather than ceramide), ARA (alpha-L-arabinopyranose rather than arachidonic acid), LNS, LNN, and GLF.
 
 See `docs/DATA_DICTIONARY.md` for the complete list.
 

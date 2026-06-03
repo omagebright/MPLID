@@ -49,15 +49,15 @@ The 4.0 Å cutoff was chosen based on:
 
 ### Supported Lipid Types
 
-MPLID recognizes 117 lipid codes from the PDB Chemical Component Dictionary and CHARMM simulation nomenclature. Major categories include:
+MPLID uses a curated list of 117 candidate lipid identifiers, including PDB-derived ligand codes and CHARMM simulation nomenclature. PDB-derived candidate codes should be interpreted together with RCSB Chemical Component Dictionary verification, because some historical candidate assignments were found to be incorrect or ambiguous during revision. Major categories include:
 
 | Category | Count | Examples | Description |
 |----------|-------|----------|-------------|
 | Phospholipids | 24 | PC1, PCW, POV, PEE, PGV | Membrane bilayer components |
 | Cardiolipin | 4 | CDL, C9V, 18W, LCL | Mitochondrial lipids |
-| Sphingolipids | 7 | SPH, S1P, HXJ, CRT | Sphingosine-based lipids |
+| Sphingolipids | 7 candidate entries | SPH, S1P, HXJ | Sphingosine-based lipids; verify candidate codes against RCSB before biological interpretation |
 | Sterols | 9 | CLR, CHD, Y01, ERG | Cholesterol and derivatives |
-| Fatty acids | 14 | PLM, MYR, OLA, STE, ARA | Free fatty acid chains |
+| Fatty acids | 14 candidate entries | PLM, MYR, OLA, STE, DHA | Free fatty acid chains; verify candidate codes against RCSB before biological interpretation |
 | Glycerolipids | 6 | TGL, DAG, MAG, GMO | Glycerol-based lipids |
 | Detergents | 22 | LDA, LMT, BOG, OLC, DPC | Membrane-mimetic molecules |
 | Lipid A | 3 | LPA, KDO, 6LP | LPS components |

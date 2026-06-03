@@ -136,21 +136,21 @@ File: `data/statistics/lipid_distribution.csv`
 | HXJ | Sphingomyelin/ceramide variant |
 | SPH | Sphingosine |
 | S1P | Sphingosine-1-phosphate |
-| CRT | Ceramide |
+| CRT | Historical candidate assignment: ceramide. RCSB verification identifies CRT as spirilloxanthin; interpret as misclassified/ambiguous in MPLID audit. |
 | GCR | Glucosylceramide |
 | GSP | Ganglioside |
-| GLF | Galactosylceramide |
+| GLF | Historical candidate assignment: galactosylceramide. RCSB verification identifies GLF as alpha-D-glucopyranosyl fluoride; zero impact in the MPLID dataset. |
 
 ### Sterols (9 codes)
 
 | Code | Name |
 |------|------|
 | CLR | Cholesterol |
-| CHD | Cholesterol derivative |
+| CHD | Cholic acid; originally treated as a sterol-class candidate, but distinct from cholesterol hemisuccinate |
 | Y01 | Cholesterol hemisuccinate |
 | OHC | 25-hydroxycholesterol |
 | OCL | Cholesteryl oleate |
-| LNS | Lanosterol |
+| LNS | Historical candidate assignment: lanosterol. RCSB verification identifies LNS as 6-(methylcarbamoyl)pyridine-2-carboxylic acid; zero impact in the MPLID dataset. |
 | ERG | Ergosterol |
 | SIT | Beta-sitosterol |
 | STI | Stigmasterol |
@@ -163,10 +163,10 @@ File: `data/statistics/lipid_distribution.csv`
 | MYR | Myristic acid (C14:0) |
 | OLA | Oleic acid (C18:1) |
 | STE | Stearic acid (C18:0) |
-| ARA | Arachidonic acid (C20:4) |
+| ARA | Historical candidate assignment: arachidonic acid. RCSB verification identifies ARA as alpha-L-arabinopyranose; retained only as documented audit finding. |
 | DHA | Docosahexaenoic acid (C22:6) |
 | LNL | Linoleic acid (C18:2) |
-| LNN | Alpha-linolenic acid (C18:3) |
+| LNN | Historical candidate assignment: alpha-linolenic acid. RCSB verification identifies LNN as (6-hydroxybiphenyl-3-yl)acetic acid; zero impact in the MPLID dataset. |
 | EPA | Eicosapentaenoic acid (C20:5) |
 | PAM | Palmitate ion |
 | DCR | Decanoic acid |

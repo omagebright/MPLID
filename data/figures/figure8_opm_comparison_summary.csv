@@ -1,0 +1,14 @@
+metric,value
+total_shared_proteins,2457.0
+total_residues,4344868.0
+contacts_total,28497.0
+contacts_in_opm_zone,14581.0
+contacts_outside_opm_zone,13916.0
+contacts_in_zone_pct,51.17
+contacts_outside_zone_pct,48.83
+opm_zone_residues_total,1170590.0
+opm_zone_with_contact,14581.0
+opm_zone_without_contact,1156009.0
+opm_zone_with_contact_pct,1.25
+opm_zone_without_contact_pct,98.75
+neither,3160362.0

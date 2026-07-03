@@ -87,20 +87,22 @@ print(f"Contact rate: {stats['contact_rate']:.2%}")
 
 | Metric | Value |
 |--------|-------|
-| Total proteins | 3,192 |
-| Total residues | 5,134,242 |
-| Contact residues | 38,435 |
-| Contact rate | 0.75% |
-| Sequence clusters | 594 |
+| Total proteins | 4,704 |
+| Total residues | 8,055,325 |
+| Contact residues | 80,439 |
+| Contact rate | 1.00% |
+| Sequence clusters | 813 |
 
 ### Split Distribution
 
 | Split | Proteins | Residues |
 |-------|----------|----------|
-| Train | 1,840 | 2,634,209 |
-| Validation | 811 | 1,632,603 |
-| Test | 541 | 867,430 |
+| Train | 2,578 | 4,907,696 |
+| Validation | 1,051 | 1,403,838 |
+| Test | 1,075 | 1,743,791 |
 
 ## License
 
-Data: CC-BY 4.0
+Data: CC0 1.0 Universal (Public Domain Dedication) — https://creativecommons.org/publicdomain/zero/1.0/
+
+This matches the CC0 dedication stated in the associated manuscript and the Zenodo deposit. Code in this repository is licensed separately under the MIT License (see `LICENSE`).
